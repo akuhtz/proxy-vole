@@ -1,5 +1,7 @@
 # proxy-vole
 
+[![Build Status](https://travis-ci.org/akuhtz/proxy-vole.svg?branch=travis)](https://travis-ci.org/akuhtz/proxy-vole)
+
 Proxy Vole is a Java library to auto detect the platform network proxy settings.  
 Note: This library is a fork of the seemingly dead [proxy-vole](https://github.com/MarkusBernhardt/proxy-vole)
 fork from Markus Bernhardt which was based on the dead [proxy-vole](https://code.google.com/p/proxy-vole/) project 
