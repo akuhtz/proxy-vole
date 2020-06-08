@@ -20,7 +20,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <downloadSources>true</downloadSources>
     <downloadJavadocs>true</downloadJavadocs>
-    <java.version>1.6</java.version>
+    <java.version>1.8</java.version>
 	<enforcer-no-snapshots.skip>false</enforcer-no-snapshots.skip>
   </properties>
 
@@ -101,6 +101,11 @@
         <groupId>org.javadelight</groupId>
         <artifactId>delight-rhino-sandbox</artifactId>
         <version>0.0.11</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mozilla</groupId>
+        <artifactId>rhino</artifactId>
+        <version>1.7.12</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
