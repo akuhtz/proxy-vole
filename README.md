@@ -15,6 +15,19 @@ The library provides some proxy setting search strategies to read the proxy sett
 * Needed to change the Maven coordinates to be able to push it to Maven Central on my own.
 
 ## Usage
+### Adding the jar to your build
+Add the dependency to your pom.xml
+```Xml
+<dependency>
+  <groupId>org.bidib.com.github.markusbernhardt</groupId>
+  <artifactId>proxy-vole</artifactId>
+  <version>1.0.6-RC2</version>
+</dependency>
+```
+or to you gradle.build:
+```
+compile 'org.bidib.com.github.markusbernhardt:proxy-vole:1.0.6-RC2'
+```
 
 ### Using the default strategy to find the settings
 ```Java
