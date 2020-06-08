@@ -1,0 +1,24 @@
+language: java
+install: true
+sudo: false
+
+jdk:
+  - openjdk8
+
+env:
+  global:
+    - MVN_VERSION="3.6.3"
+
+before_install:
+
+install:
+  - mvn -version
+  - mvn -U clean verify
+
+
+cache:
+ directories:
+   - $HOME/.m2/repository
+   
+notifications:
+  email: false
