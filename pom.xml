@@ -60,7 +60,7 @@
     </dependency>
     <dependency>
       <groupId>org.javadelight</groupId>
-      <artifactId>delight-nashorn-sandbox</artifactId>
+      <artifactId>delight-rhino-sandbox</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -99,8 +99,8 @@
       </dependency>
       <dependency>
         <groupId>org.javadelight</groupId>
-        <artifactId>delight-nashorn-sandbox</artifactId>
-        <version>0.1.18</version>
+        <artifactId>delight-rhino-sandbox</artifactId>
+        <version>0.0.11</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -128,6 +128,7 @@
         <!-- generate the osgi manifest -->
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+		<version>4.2.1</version>
         <extensions>true</extensions>
         <configuration>
           <!-- see http://felix.apache.org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html -->
