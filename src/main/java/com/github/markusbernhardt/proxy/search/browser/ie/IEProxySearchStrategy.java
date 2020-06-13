@@ -2,7 +2,7 @@ package com.github.markusbernhardt.proxy.search.browser.ie;
 
 import java.net.ProxySelector;
 import java.util.Properties;
-import com.github.markusbernhardt.proxy.jna.win.WinHttp;
+
 import com.github.markusbernhardt.proxy.jna.win.WinHttpCurrentUserIEProxyConfig;
 import com.github.markusbernhardt.proxy.jna.win.WinHttpHelpers;
 import com.github.markusbernhardt.proxy.search.desktop.win.CommonWindowsSearchStrategy;
@@ -23,6 +23,17 @@ import com.sun.jna.platform.win32.WinDef.DWORD;
 
 public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 
+	/**
+	 * Use DHCP to locate the proxy auto-configuration file.
+	 */
+	private static final int WINHTTP_AUTO_DETECT_TYPE_DHCP = 0x00000001;
+
+	/**
+	 * Use DNS to attempt to locate the proxy auto-configuration file at a
+	 * well-known location on the domain of the local computer.
+	 */
+	private static final int WINHTTP_AUTO_DETECT_TYPE_DNS_A = 0x00000002;
+	
 	/*************************************************************************
 	 * getProxySelector
 	 * 
@@ -64,7 +75,7 @@ public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 
 		// Retrieve the IE proxy configuration.
 		WinHttpCurrentUserIEProxyConfig winHttpCurrentUserIeProxyConfig = new WinHttpCurrentUserIEProxyConfig();
-		boolean result = WinHttp.INSTANCE.WinHttpGetIEProxyConfigForCurrentUser(winHttpCurrentUserIeProxyConfig);
+		boolean result = WinHttpHelpers.WINHTTP_INSTANCE.WinHttpGetIEProxyConfigForCurrentUser(winHttpCurrentUserIeProxyConfig);
 		if (!result) {
 			return null;
 		}
@@ -95,7 +106,7 @@ public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 			Logger.log(getClass(), LogLevel.TRACE, "Autodetecting script URL.");
 			// This will take some time.
 			DWORD dwAutoDetectFlags = new DWORD(
-			        WinHttp.WINHTTP_AUTO_DETECT_TYPE_DHCP | WinHttp.WINHTTP_AUTO_DETECT_TYPE_DNS_A);
+			        WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A);
                         pacUrl = WinHttpHelpers.detectAutoProxyConfigUrl(dwAutoDetectFlags);
 		}
 		if (pacUrl == null) {

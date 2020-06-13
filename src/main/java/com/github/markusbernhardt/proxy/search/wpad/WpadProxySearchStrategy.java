@@ -210,75 +210,75 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
   }
 
   private String checkDhcpAckForPAC(InetAddress ip, byte[] mac) throws IOException {
-    DHCPMessage messageOut = new DHCPMessage(DHCPMessage.SERVER_PORT);
-    DHCPMessage messageIn = new DHCPMessage(DHCPMessage.CLIENT_PORT);
-    DHCPSocket bindSocket = new DHCPSocket(DHCPMessage.CLIENT_PORT, ip);
-    // from DHCPINFORM Message Clarifications
-    // https://tools.ietf.org/html/draft-ietf-dhc-dhcpinform-clarify-06
+    try (DHCPSocket bindSocket = new DHCPSocket(DHCPMessage.CLIENT_PORT, ip)) {
+    	DHCPMessage messageOut = new DHCPMessage(DHCPMessage.SERVER_PORT); 
+        DHCPMessage messageIn = new DHCPMessage(DHCPMessage.CLIENT_PORT);
+        
+        // from DHCPINFORM Message Clarifications
+        // https://tools.ietf.org/html/draft-ietf-dhc-dhcpinform-clarify-06
 
-    // Clients are still required to fulfill the DHCPv4 requirements for
-    // DHCPINFORM messages ([RFC2131], Sections 4.4.1 and 4.4.3). But
-    // the following are clarified as in addition, or to overlay those
-    // requirements:
-    messageOut.setOp((byte) 1); // setup message to send a DCHPREQUEST
-    // Clients MUST set 'ciaddr' to a working IPv4 address which they
-    // can use to receive replies. This address SHOULD be an address
-    // that is currently assigned to the interface upon which the client
-    // is transmitting its DHCPINFORM, except in the condition where the
-    // DHCP client is unable to determine a valid IP address for its
-    // host, in which case the client MUST set 'ciaddr' to all-zero.
-    messageOut.setCiaddr(ip.getAddress());
-    // Clients MUST set 'chaddr', 'htype', and 'hlen' to the hardware
-    // address of the interface upon which the DHCPINFORM message is
-    // being transmitted, except in the condition where the DHCP client
-    // is unable to determine this address, in which case all three
-    // fields MUST be set all-zero.
-    byte[] addr = new byte[16];
-    if (mac != null)
-      for (int i = 0; i < 6; i++)
-        addr[i] = mac[i];
-    // Despite what the spec says above if these are set to 0 you may
-    // not get a response from some dhcp servers
-    messageOut.setHtype((byte) 1); // 1 for Ethernet
-    messageOut.setHlen((byte) 6); // 6 for IEEE 802 MAC addresses
-    messageOut.setChaddr(addr);
-    // Clients MUST set the 'flags' field to zero. This means that the
-    // client MUST NOT set the 'BROADCAST' flag, and MUST be capable of
-    // receiving IP unicasts.
-    messageOut.setFlags((short) 0);
-    messageOut.setHops((byte) 0);
-    messageOut.setXid(new Random().nextInt());
-    messageOut.setSecs((short) 0);
-    messageOut.setYiaddr(InetAddress.getByName("0.0.0.0").getAddress());
-    messageOut.setSiaddr(InetAddress.getByName("0.0.0.0").getAddress());
-    messageOut.setGiaddr(InetAddress.getByName("0.0.0.0").getAddress());
+        // Clients are still required to fulfill the DHCPv4 requirements for
+        // DHCPINFORM messages ([RFC2131], Sections 4.4.1 and 4.4.3). But
+        // the following are clarified as in addition, or to overlay those
+        // requirements:
+        messageOut.setOp((byte) 1); // setup message to send a DCHPREQUEST
+        // Clients MUST set 'ciaddr' to a working IPv4 address which they
+        // can use to receive replies. This address SHOULD be an address
+        // that is currently assigned to the interface upon which the client
+        // is transmitting its DHCPINFORM, except in the condition where the
+        // DHCP client is unable to determine a valid IP address for its
+        // host, in which case the client MUST set 'ciaddr' to all-zero.
+        messageOut.setCiaddr(ip.getAddress());
+        // Clients MUST set 'chaddr', 'htype', and 'hlen' to the hardware
+        // address of the interface upon which the DHCPINFORM message is
+        // being transmitted, except in the condition where the DHCP client
+        // is unable to determine this address, in which case all three
+        // fields MUST be set all-zero.
+        byte[] addr = new byte[16];
+        if (mac != null)
+          for (int i = 0; i < 6; i++)
+            addr[i] = mac[i];
+        // Despite what the spec says above if these are set to 0 you may
+        // not get a response from some dhcp servers
+        messageOut.setHtype((byte) 1); // 1 for Ethernet
+        messageOut.setHlen((byte) 6); // 6 for IEEE 802 MAC addresses
+        messageOut.setChaddr(addr);
+        // Clients MUST set the 'flags' field to zero. This means that the
+        // client MUST NOT set the 'BROADCAST' flag, and MUST be capable of
+        // receiving IP unicasts.
+        messageOut.setFlags((short) 0);
+        messageOut.setHops((byte) 0);
+        messageOut.setXid(new Random().nextInt());
+        messageOut.setSecs((short) 0);
+        messageOut.setYiaddr(InetAddress.getByName("0.0.0.0").getAddress());
+        messageOut.setSiaddr(InetAddress.getByName("0.0.0.0").getAddress());
+        messageOut.setGiaddr(InetAddress.getByName("0.0.0.0").getAddress());
 
-    // From RFC 2131 Section 4.4 Table 5
-    // https://tools.ietf.org/html/rfc2131#section-4.4
-    // Looks like the only option we need to set for a DHCPINFORM
-    // message is the DHCP message type
-    messageOut.setOption(DHCPOptions.OPTION_DHCP_MESSAGE_TYPE, new byte[] { DHCPMessage.DHCPINFORM });
-    Logger.log(getClass(), LogLevel.TRACE, "Trying DHCPInform on " + ip.getHostAddress() + (mac != null ? (" @ " + getMacString(mac)) : ""));
-    bindSocket.send(messageOut);
-    boolean sentinal = true;
-    while (sentinal) {
-      if (bindSocket.receive(messageIn)) {
-        if (messageOut.getXid() == messageIn.getXid()) {
-          byte[] pacFileLocationRaw = messageIn.getOption(DHCPOptions.OPTION_PROXY_AUTODISCOVERY);
-          String pacFileLocation = null;
-          if (pacFileLocationRaw != null)
-            pacFileLocation = new String(pacFileLocationRaw);
-          bindSocket.close();
-          return pacFileLocation;
-        } else {
-          bindSocket.send(messageOut);
+        // From RFC 2131 Section 4.4 Table 5
+        // https://tools.ietf.org/html/rfc2131#section-4.4
+        // Looks like the only option we need to set for a DHCPINFORM
+        // message is the DHCP message type
+        messageOut.setOption(DHCPOptions.OPTION_DHCP_MESSAGE_TYPE, new byte[] { DHCPMessage.DHCPINFORM });
+        Logger.log(getClass(), LogLevel.TRACE, "Trying DHCPInform on " + ip.getHostAddress() + (mac != null ? (" @ " + getMacString(mac)) : ""));
+        bindSocket.send(messageOut);
+        boolean sentinal = true;
+        while (sentinal) {
+          if (bindSocket.receive(messageIn)) {
+            if (messageOut.getXid() == messageIn.getXid()) {
+              byte[] pacFileLocationRaw = messageIn.getOption(DHCPOptions.OPTION_PROXY_AUTODISCOVERY);
+              String pacFileLocation = null;
+              if (pacFileLocationRaw != null)
+                pacFileLocation = new String(pacFileLocationRaw);
+              return pacFileLocation;
+            } else {
+              bindSocket.send(messageOut);
+            }
+          } else {
+            Logger.log(getClass(), LogLevel.DEBUG, "Timed out.");
+            sentinal = false;
+          }
         }
-      } else {
-        Logger.log(getClass(), LogLevel.DEBUG, "Timed out.");
-        sentinal = false;
-      }
     }
-    bindSocket.close();
     return null;
   }
 }

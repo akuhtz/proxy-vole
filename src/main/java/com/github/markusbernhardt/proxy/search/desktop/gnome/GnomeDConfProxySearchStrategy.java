@@ -298,7 +298,7 @@ public class GnomeDConfProxySearchStrategy implements ProxySearchStrategy {
 			int schemaSep = line.indexOf(" ");
 			int keySep = line.indexOf(" ", schemaSep + 1);
 			String entry = line.substring(0, keySep);
-			String value = line.substring(keySep + 1).replaceAll("'", "");
+			String value = line.substring(keySep + 1).replace("'", "");
 
 			// TODO 30.03.2015 bros Test for IP6 compatibility
 			if (value.matches("\\[.*\\]")) {

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ProxySelector;
 import java.util.Properties;
+
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -332,7 +334,10 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 		}
 
 		try {
-			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			documentBuilder.setEntityResolver(new EmptyXMLResolver());
 			Document doc = documentBuilder.parse(settingsFile);
 			Element root = doc.getDocumentElement();

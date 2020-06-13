@@ -50,10 +50,10 @@ public class JavaxPacScriptParser implements PacScriptParser {
      *             on error.
      ************************************************************************/
     private RhinoSandbox setupEngine() throws ProxyEvaluationException {
-        RhinoSandbox engine = RhinoSandboxes.create();
-        engine.inject(SCRIPT_METHODS_OBJECT, new PacScriptMethods());
+        RhinoSandbox rhinoSandbox = RhinoSandboxes.create();
+        rhinoSandbox.inject(SCRIPT_METHODS_OBJECT, new PacScriptMethods());
         // allow String
-        engine.allow(String.class);
+        rhinoSandbox.allow(String.class);
 
         Class<?> scriptMethodsClazz = ScriptMethods.class;
         Method[] scriptMethods = scriptMethodsClazz.getMethods();
@@ -79,7 +79,7 @@ public class JavaxPacScriptParser implements PacScriptParser {
             toEval.append(functionCall).append("; }");
             try {
                 // Add functions with calls to Java object to global scope
-                engine.evalWithGlobalScope(SOURCE_NAME, toEval.toString());
+                rhinoSandbox.evalWithGlobalScope(SOURCE_NAME, toEval.toString());
             }
             catch (Exception e) {
                 Logger.log(getClass(), LogLevel.ERROR, "JS evaluation error when creating alias for " + name + ".", e);
@@ -87,7 +87,7 @@ public class JavaxPacScriptParser implements PacScriptParser {
             }
         }
 
-        return engine;
+        return rhinoSandbox;
     }
 
     /*************************************************************************

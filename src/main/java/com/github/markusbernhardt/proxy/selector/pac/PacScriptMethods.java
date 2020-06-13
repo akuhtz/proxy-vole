@@ -40,14 +40,23 @@ public class PacScriptMethods implements ScriptMethods {
         private String ipAddress = null;
         private String ipAddressEx = null;
         
-	private final static String GMT = "GMT";
+	private static final String GMT = "GMT";
 
-	private final static List<String> DAYS = Collections
+	private static final List<String> DAYS = Collections
 	        .unmodifiableList(Arrays.asList("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"));
 
-	private final static List<String> MONTH = Collections.unmodifiableList(
+	private static final List<String> MONTH = Collections.unmodifiableList(
 	        Arrays.asList("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"));
-
+	
+	private static final String DAY1 = "day1";
+	private static final String DAY2 = "day2";
+	private static final String MONTH1 = "month1";
+	private static final String MONTH2 = "month2";
+	private static final String YEAR1 = "year1";
+	private static final String YEAR2 = "year2";
+	
+	
+	
 	private Calendar currentTime;
 
 	/*************************************************************************
@@ -411,27 +420,27 @@ public class PacScriptMethods implements ScriptMethods {
 		Date current = cal.getTime();
 
 		// Build the "from" date
-		if (params.get("day1") != null) {
-			cal.set(Calendar.DAY_OF_MONTH, params.get("day1"));
+		if (params.get(DAY1) != null) {
+			cal.set(Calendar.DAY_OF_MONTH, params.get(DAY1));
 		}
-		if (params.get("month1") != null) {
-			cal.set(Calendar.MONTH, params.get("month1"));
+		if (params.get(MONTH1) != null) {
+			cal.set(Calendar.MONTH, params.get(MONTH1));
 		}
-		if (params.get("year1") != null) {
-			cal.set(Calendar.YEAR, params.get("year1"));
+		if (params.get(YEAR1) != null) {
+			cal.set(Calendar.YEAR, params.get(YEAR1));
 		}
 		Date from = cal.getTime();
 
 		// Build the "to" date
 		Date to;
-		if (params.get("day2") != null) {
-			cal.set(Calendar.DAY_OF_MONTH, params.get("day2"));
+		if (params.get(DAY2) != null) {
+			cal.set(Calendar.DAY_OF_MONTH, params.get(DAY2));
 		}
-		if (params.get("month2") != null) {
-			cal.set(Calendar.MONTH, params.get("month2"));
+		if (params.get(MONTH2) != null) {
+			cal.set(Calendar.MONTH, params.get(MONTH2));
 		}
-		if (params.get("year2") != null) {
-			cal.set(Calendar.YEAR, params.get("year2"));
+		if (params.get(YEAR2) != null) {
+			cal.set(Calendar.YEAR, params.get(YEAR2));
 		}
 		to = cal.getTime();
 
@@ -465,17 +474,17 @@ public class PacScriptMethods implements ScriptMethods {
 			int n = ((Number) value).intValue();
 			if (n <= 31) {
 				// Its a day
-				if (params.get("day1") == null) {
-					params.put("day1", n);
+				if (params.get(DAY1) == null) {
+					params.put(DAY1, n);
 				} else {
-					params.put("day2", n);
+					params.put(DAY2, n);
 				}
 			} else {
 				// Its a year
-				if (params.get("year1") == null) {
-					params.put("year1", n);
+				if (params.get(YEAR1) == null) {
+					params.put(YEAR1, n);
 				} else {
-					params.put("year2", n);
+					params.put(YEAR2, n);
 				}
 			}
 		}
@@ -484,10 +493,10 @@ public class PacScriptMethods implements ScriptMethods {
 			int n = MONTH.indexOf(((String) value).toUpperCase());
 			if (n > -1) {
 				// Its a month
-				if (params.get("month1") == null) {
-					params.put("month1", n);
+				if (params.get(MONTH1) == null) {
+					params.put(MONTH1, n);
 				} else {
-					params.put("month2", n);
+					params.put(MONTH2, n);
 				}
 			}
 		}

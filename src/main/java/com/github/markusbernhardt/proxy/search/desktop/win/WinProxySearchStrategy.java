@@ -4,6 +4,7 @@ import java.net.ProxySelector;
 import java.util.Properties;
 
 import com.github.markusbernhardt.proxy.jna.win.WinHttp;
+import com.github.markusbernhardt.proxy.jna.win.WinHttpHelpers;
 import com.github.markusbernhardt.proxy.jna.win.WinHttpProxyInfo;
 import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.util.Logger;
@@ -19,7 +20,36 @@ import com.github.markusbernhardt.proxy.util.ProxyException;
  ****************************************************************************/
 
 public class WinProxySearchStrategy extends CommonWindowsSearchStrategy {
+	/**
+	 * Resolves all host names directly without a proxy.
+	 */
+	static final int WINHTTP_ACCESS_TYPE_DEFAULT_PROXY = 0;
 
+	/**
+	 * Retrieves the static proxy or direct configuration from the registry.
+	 * WINHTTP_ACCESS_TYPE_DEFAULT_PROXY does not inherit browser proxy
+	 * settings. WinHTTP does not share any proxy settings with Internet
+	 * Explorer.
+	 * <p>
+	 * The WinHTTP proxy configuration is set by one of these mechanisms.
+	 * <ul>
+	 * <li>The proxycfg.exe utility on Windows XP and Windows Server 2003 or
+	 * earlier.</li>
+	 * <li>The netsh.exe utility on Windows Vista and Windows Server 2008 or
+	 * later.</li>
+	 * <li>WinHttpSetDefaultProxyConfiguration on all platforms.</li>
+	 * </ul>
+	 */
+	static final int WINHTTP_ACCESS_TYPE_NO_PROXY = 1;
+
+	/**
+	 * Passes requests to the proxy unless a proxy bypass list is supplied and
+	 * the name to be resolved bypasses the proxy. In this case, this function
+	 * uses WINHTTP_ACCESS_TYPE_NAMED_PROXY.
+	 */
+	static final int WINHTTP_ACCESS_TYPE_NAMED_PROXY = 3;
+	
+	
 	/*************************************************************************
 	 * Constructor
 	 ************************************************************************/
@@ -41,7 +71,7 @@ public class WinProxySearchStrategy extends CommonWindowsSearchStrategy {
 
 		WinProxyConfig windowsProxyConfig = readWindowsProxyConfig();
 
-		if (windowsProxyConfig.getAccessType() == WinHttp.WINHTTP_ACCESS_TYPE_NO_PROXY) {
+		if (windowsProxyConfig.getAccessType() == WINHTTP_ACCESS_TYPE_NO_PROXY) {
 			return null;
 		} else {
 			return createFixedProxySelector(windowsProxyConfig);
@@ -64,7 +94,7 @@ public class WinProxySearchStrategy extends CommonWindowsSearchStrategy {
 
 		// Retrieve the Win proxy configuration.
 		WinHttpProxyInfo winHttpProxyInfo = new WinHttpProxyInfo();
-		boolean result = WinHttp.INSTANCE.WinHttpGetDefaultProxyConfiguration(winHttpProxyInfo);
+		boolean result = WinHttpHelpers.WINHTTP_INSTANCE.WinHttpGetDefaultProxyConfiguration(winHttpProxyInfo);
 		if (!result) {
 			return null;
 		}
