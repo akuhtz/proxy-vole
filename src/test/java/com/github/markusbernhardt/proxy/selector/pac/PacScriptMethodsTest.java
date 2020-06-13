@@ -1,7 +1,7 @@
 package com.github.markusbernhardt.proxy.selector.pac;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.net.Inet4Address;
@@ -12,7 +12,6 @@ import java.util.Calendar;
 import org.junit.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
-import com.github.markusbernhardt.proxy.selector.pac.PacScriptMethods;
 
 /*****************************************************************************
  * Tests for the global PAC script methods that are used as context inside of
@@ -175,8 +174,8 @@ public class PacScriptMethodsTest {
 	@Test
 	public void testMyIpAddress() throws UnknownHostException {
 		String myIP = buildParser().myIpAddress();
-		assertFalse("127.0.0.1".equals(myIP));
-		assertFalse("".equals(myIP));
+		assertNotEquals("127.0.0.1", myIP);
+		assertNotEquals("", myIP);
 		assertNotNull(myIP);
 	}
 

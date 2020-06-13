@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -269,16 +270,15 @@ public final class PListParser {
 
 	private static Dict parse(InputSource input) throws XmlParseException {
 		try {
-			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			documentBuilder.setEntityResolver(new EmptyXMLResolver());
 			Document doc = documentBuilder.parse(input);
 			Element element = doc.getDocumentElement();
 			return PLIST.parse(element);
-		} catch (ParserConfigurationException e) {
-			throw new XmlParseException("Error reading input", e);
-		} catch (SAXException e) {
-			throw new XmlParseException("Error reading input", e);
-		} catch (IOException e) {
+		} catch (ParserConfigurationException | SAXException | IOException e) {
 			throw new XmlParseException("Error reading input", e);
 		}
 	}
@@ -296,12 +296,10 @@ public final class PListParser {
 	 *             if there was an issue reading the plist file.
 	 */
 	public static Dict load(File file) throws XmlParseException, IOException {
-		FileInputStream byteStream = new FileInputStream(file);
-		try {
+		
+		try (FileInputStream byteStream = new FileInputStream(file)) {
 			InputSource input = new InputSource(byteStream);
 			return parse(input);
-		} finally {
-			silentlyClose(byteStream);
 		}
 	}
 
@@ -311,7 +309,7 @@ public final class PListParser {
 	PListParser() {
 		this.m_dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		this.m_dateFormat.setTimeZone(TimeZone.getTimeZone("Z"));
-		this.m_simpleTypes = new HashMap<Class<?>, ElementType>();
+		this.m_simpleTypes = new HashMap<>();
 		this.m_simpleTypes.put(Integer.class, ElementType.INTEGER);
 		this.m_simpleTypes.put(Byte.class, ElementType.INTEGER);
 		this.m_simpleTypes.put(Short.class, ElementType.INTEGER);

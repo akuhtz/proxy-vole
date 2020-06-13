@@ -49,11 +49,9 @@ class FirefoxSettingParser {
 		if (profilesIniFile.exists()) {
 			Ini profilesIni = new Ini(profilesIniFile);
 			for (Entry<String, Section> entry : profilesIni.entrySet()) {
-				if ("default".equals(entry.getValue().get("Name"))) {
-					if ("1".equals(entry.getValue().get("IsRelative"))) {
-						profileFolder = new File(profilesIniFile.getParentFile().getAbsolutePath(),
-						        entry.getValue().get("Path"));
-					}
+				if ("default".equals(entry.getValue().get("Name")) && "1".equals(entry.getValue().get("IsRelative"))) {
+					profileFolder = new File(profilesIniFile.getParentFile().getAbsolutePath(),
+							entry.getValue().get("Path"));
 				}
 			}
 		}
@@ -66,10 +64,8 @@ class FirefoxSettingParser {
 		// Read settings from file
 		File settingsFile = new File(profileFolder, "prefs.js");
 
-		BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(settingsFile)));
-
 		Properties result = new Properties();
-		try {
+		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(settingsFile)))) {
 			String line = fin.readLine();
 			while (line != null) {
 				line = line.trim();
@@ -94,8 +90,6 @@ class FirefoxSettingParser {
 				}
 				line = fin.readLine();
 			}
-		} finally {
-			fin.close();
 		}
 
 		return result;

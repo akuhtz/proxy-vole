@@ -1,7 +1,8 @@
 package com.github.markusbernhardt.proxy.search.wpad.dhcp;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * This class represents a linked list of options for a DHCP message. Its
@@ -106,10 +107,10 @@ public class DHCPOptions {
 		}
 	}
 
-	private Hashtable<Byte, DHCPOptionsEntry> optionsTable = null;
+	private Map<Byte, DHCPOptionsEntry> optionsTable = null;
 
 	public DHCPOptions() {
-		this.optionsTable = new Hashtable<Byte, DHCPOptionsEntry>();
+		this.optionsTable = new HashMap<>();
 	}
 
 	/**
@@ -153,7 +154,7 @@ public class DHCPOptions {
 	 */
 	public byte[] getOption(byte entryCode) {
 		if (this.contains(entryCode)) {
-			DHCPOptionsEntry ent = this.optionsTable.get(new Byte(entryCode));
+			DHCPOptionsEntry ent = this.optionsTable.get(entryCode);
 			return ent.content;
 		} else {
 			return null;
@@ -229,17 +230,15 @@ public class DHCPOptions {
 		options[3] = (byte) 99;
 
 		int position = 4;
-		Enumeration<DHCPOptionsEntry> e = this.optionsTable.elements();
 
-		while (e.hasMoreElements()) {
-			DHCPOptionsEntry entry = e.nextElement();
-			options[position++] = entry.code;
-			options[position++] = entry.length;
-			for (int i = 0; i < entry.length; ++i) {
-				options[position++] = entry.content[i];
+		for (Entry<Byte, DHCPOptionsEntry> entry : optionsTable.entrySet()) {
+			options[position++] = entry.getValue().code;
+			options[position++] = entry.getValue().length;
+			for (int i = 0; i < entry.getValue().length; ++i) {
+				options[position++] = entry.getValue().content[i];
 			}
 		}
-
+		
 		options[position] = (byte) 255; // insert end option
 		return options;
 	}

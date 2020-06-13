@@ -12,56 +12,6 @@ import com.sun.jna.win32.W32APIOptions;
  * @author Markus Bernhardt, Copyright 2016
  */
 public interface WinHttp extends StdCallLibrary {
-
-	WinHttp INSTANCE = (WinHttp) Native.loadLibrary("winhttp", WinHttp.class, W32APIOptions.UNICODE_OPTIONS);
-
-	/**
-	 * Use DHCP to locate the proxy auto-configuration file.
-	 */
-	int WINHTTP_AUTO_DETECT_TYPE_DHCP = 0x00000001;
-
-	/**
-	 * Use DNS to attempt to locate the proxy auto-configuration file at a
-	 * well-known location on the domain of the local computer.
-	 */
-	int WINHTTP_AUTO_DETECT_TYPE_DNS_A = 0x00000002;
-
-	/**
-	 * Resolves all host names directly without a proxy.
-	 */
-	int WINHTTP_ACCESS_TYPE_DEFAULT_PROXY = 0;
-
-        /**
-         * Returned if WinHTTP was unable to discover the URL of the 
-         * Proxy Auto-Configuration (PAC) file using the WPAD method.
-         */
-        int ERROR_WINHTTP_AUTODETECTION_FAILED = 12180;
-        
-        
-	/**
-	 * Retrieves the static proxy or direct configuration from the registry.
-	 * WINHTTP_ACCESS_TYPE_DEFAULT_PROXY does not inherit browser proxy
-	 * settings. WinHTTP does not share any proxy settings with Internet
-	 * Explorer.
-	 * <p>
-	 * The WinHTTP proxy configuration is set by one of these mechanisms.
-	 * <ul>
-	 * <li>The proxycfg.exe utility on Windows XP and Windows Server 2003 or
-	 * earlier.</li>
-	 * <li>The netsh.exe utility on Windows Vista and Windows Server 2008 or
-	 * later.</li>
-	 * <li>WinHttpSetDefaultProxyConfiguration on all platforms.</li>
-	 * </ul>
-	 */
-	int WINHTTP_ACCESS_TYPE_NO_PROXY = 1;
-
-	/**
-	 * Passes requests to the proxy unless a proxy bypass list is supplied and
-	 * the name to be resolved bypasses the proxy. In this case, this function
-	 * uses WINHTTP_ACCESS_TYPE_NAMED_PROXY.
-	 */
-	int WINHTTP_ACCESS_TYPE_NAMED_PROXY = 3;
-
 	/**
 	 * The WinHttpDetectAutoProxyConfigUrl function finds the URL for the Proxy
 	 * Auto-Configuration (PAC) file. This function reports the URL of the PAC
