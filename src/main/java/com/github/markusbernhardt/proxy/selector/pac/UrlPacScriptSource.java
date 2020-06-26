@@ -93,15 +93,13 @@ public class UrlPacScriptSource implements PacScriptSource {
 			} else {
 				file = new File(new URL(scriptUrl).toURI());
 			}
-			BufferedReader r = new BufferedReader(new FileReader(file));
+			
 			StringBuilder result = new StringBuilder();
-			try {
+			try (BufferedReader r = new BufferedReader(new FileReader(file))) {
 				String line;
 				while ((line = r.readLine()) != null) {
 					result.append(line).append("\n");
 				}
-			} finally {
-				r.close();
 			}
 			return result.toString();
 		} catch (Exception e) {

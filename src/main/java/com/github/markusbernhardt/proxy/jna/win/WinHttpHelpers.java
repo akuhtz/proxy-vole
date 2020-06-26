@@ -2,7 +2,9 @@ package com.github.markusbernhardt.proxy.jna.win;
 
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.sun.jna.LastErrorException;
+import com.sun.jna.Native;
 import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.win32.W32APIOptions;
 
 /**
  * Static helper methods for Windows {@code WinHttp} functions.
@@ -10,7 +12,14 @@ import com.sun.jna.platform.win32.WinDef;
  * @author phansson
  */
 public class WinHttpHelpers {
-
+	public static final WinHttp WINHTTP_INSTANCE = Native.load("winhttp", WinHttp.class, W32APIOptions.UNICODE_OPTIONS);
+	
+	/**
+	 * Returned if WinHTTP was unable to discover the URL of the Proxy
+	 * Auto-Configuration (PAC) file using the WPAD method.
+	 */
+	private static final int ERROR_WINHTTP_AUTODETECTION_FAILED = 12180;
+	
     private WinHttpHelpers() {
     }
 
@@ -32,9 +41,9 @@ public class WinHttpHelpers {
         WTypes2.LPWSTRByReference ppwszAutoConfigUrl = new WTypes2.LPWSTRByReference();
         boolean result = false;
         try {
-            result = WinHttp.INSTANCE.WinHttpDetectAutoProxyConfigUrl(dwAutoDetectFlags, ppwszAutoConfigUrl);
+            result = WinHttpHelpers.WINHTTP_INSTANCE.WinHttpDetectAutoProxyConfigUrl(dwAutoDetectFlags, ppwszAutoConfigUrl);
         } catch (LastErrorException ex) {
-            if (ex.getErrorCode() == WinHttp.ERROR_WINHTTP_AUTODETECTION_FAILED) {
+            if (ex.getErrorCode() == ERROR_WINHTTP_AUTODETECTION_FAILED) {
                 // This error is to be expected. It just means that the lookup
                 // using either DHCP, DNS or both, failed because there wasn't
                 // a useful reply from DHCP / DNS. (meaning the site hasn't
