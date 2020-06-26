@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.github.markusbernhardt.proxy.selector.whitelist.IPWithSubnetChecker;
-
 /*****************************************************************************
  * Some unit tests for the IP subnet mask checker.
  * 

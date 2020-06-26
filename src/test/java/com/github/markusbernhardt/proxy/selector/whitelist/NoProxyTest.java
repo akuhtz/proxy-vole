@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
-import com.github.markusbernhardt.proxy.selector.whitelist.ProxyBypassListSelector;
 
 /*****************************************************************************
  * Some unit tests for the white list selector.

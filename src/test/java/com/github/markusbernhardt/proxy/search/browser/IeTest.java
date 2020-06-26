@@ -2,6 +2,7 @@ package com.github.markusbernhardt.proxy.search.browser;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -13,9 +14,9 @@ import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.search.browser.ie.IELocalByPassFilter;
 import com.github.markusbernhardt.proxy.search.browser.ie.IEProxySearchStrategy;
 import com.github.markusbernhardt.proxy.util.PlatformUtil;
+import com.github.markusbernhardt.proxy.util.PlatformUtil.Platform;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.UriFilter;
-import com.github.markusbernhardt.proxy.util.PlatformUtil.Platform;
 
 /*****************************************************************************
  * Unit tests for the InternetExplorer search. Only limited testing as this only
@@ -40,7 +41,11 @@ public class IeTest {
 			IEProxySearchStrategy st = new IEProxySearchStrategy();
 
 			// Try at least to invoke it and test if the dll does not crash
-			st.getProxySelector();
+			try {
+				st.getProxySelector();
+			} catch (ProxyException e) {
+				fail();
+			}
 		}
 	}
 

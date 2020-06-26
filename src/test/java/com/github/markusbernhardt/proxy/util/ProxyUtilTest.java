@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
-import com.github.markusbernhardt.proxy.util.ProxyUtil;
 
 /*****************************************************************************
  * Unit tests for proxy util methods

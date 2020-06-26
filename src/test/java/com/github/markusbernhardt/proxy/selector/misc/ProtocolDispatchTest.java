@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
-import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 
 /*****************************************************************************
  * Unit Tests for the ProtocolDispatchSelector

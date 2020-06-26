@@ -13,8 +13,6 @@ import java.util.List;
 import org.junit.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
-import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
-import com.github.markusbernhardt.proxy.selector.pac.UrlPacScriptSource;
 
 /**
  * @author Markus Bernhardt, Copyright 2016

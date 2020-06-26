@@ -1,5 +1,7 @@
 package com.github.markusbernhardt.proxy.search.desktop;
 
+import static org.junit.Assert.fail;
+
 import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -7,7 +9,6 @@ import java.net.URISyntaxException;
 import org.junit.Test;
 
 import com.github.markusbernhardt.proxy.ProxySearch;
-import com.github.markusbernhardt.proxy.search.desktop.DesktopProxySearchStrategy;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 
 /*****************************************************************************
@@ -27,7 +28,11 @@ public class DesktopProxySearchTest {
 	 ************************************************************************/
 	@Test
 	public void testDesktopStrategsIsWorking() throws ProxyException {
-		new DesktopProxySearchStrategy().getProxySelector();
+		try {
+			new DesktopProxySearchStrategy().getProxySelector();	
+		} catch (ProxyException e) {
+			fail();
+		}
 	}
 
 	/*************************************************************************
@@ -43,7 +48,11 @@ public class DesktopProxySearchTest {
 		ProxySearch proxySearch = ProxySearch.getDefaultProxySearch();
 		ProxySelector myProxySelector = proxySearch.getProxySelector();
 		if (myProxySelector != null) {
-			myProxySelector.select(new URI(""));
+			try {
+				myProxySelector.select(new URI(""));
+			} catch (NullPointerException e) {
+				fail("NullPointerException should not be thrown if using an empty URI.");
+			}
 		}
 	}
 

@@ -2,7 +2,6 @@ package com.github.markusbernhardt.proxy;
 
 import java.net.ProxySelector;
 
-import com.github.markusbernhardt.proxy.ProxySearch;
 import com.github.markusbernhardt.proxy.ProxySearch.Strategy;
 import com.github.markusbernhardt.proxy.util.PlatformUtil;
 import com.github.markusbernhardt.proxy.util.PlatformUtil.Platform;

@@ -16,9 +16,6 @@ import java.util.List;
 import org.junit.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
-import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
-import com.github.markusbernhardt.proxy.selector.pac.PacScriptMethods;
-import com.github.markusbernhardt.proxy.selector.pac.UrlPacScriptSource;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 
 /*****************************************************************************
@@ -70,7 +67,7 @@ public class PacProxySelectorTest {
 	 * @throws ProxyException
 	 *             on proxy detection error.
 	 * @throws MalformedURLException
-	 *             on URL erros
+	 *             on URL errors
 	 ************************************************************************/
 	@Test
 	public void pacDownloadFromURLShouldNotUseProxy() throws ProxyException, MalformedURLException {

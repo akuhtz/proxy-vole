@@ -10,9 +10,8 @@ import org.junit.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.selector.whitelist.HostnameFilter;
-import com.github.markusbernhardt.proxy.selector.whitelist.IpRangeFilter;
 import com.github.markusbernhardt.proxy.selector.whitelist.HostnameFilter.Mode;
-import com.github.markusbernhardt.proxy.util.UriFilter;
+import com.github.markusbernhardt.proxy.selector.whitelist.IpRangeFilter;
 
 /*****************************************************************************
  * Some unit tests for the UriFilter class.
