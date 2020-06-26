@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
+
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.browser.ie.IELocalByPassFilter;
 import com.github.markusbernhardt.proxy.search.wpad.WpadProxySearchStrategy;
@@ -98,7 +99,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 
 			// TODO 30.03.2015 bros Test for IP6 compatibility
 			List<?> serviceOrder = (List<?>) networkSet.getAtPath("/Network/Global/IPv4/ServiceOrder");
-			if (serviceOrder == null || serviceOrder.size() == 0) {
+			if (serviceOrder == null || serviceOrder.isEmpty()) {
 				throw new ProxyException("ServiceOrder not defined");
 			}
 
@@ -124,9 +125,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 			}
 
 			return buildSelector(proxySettings);
-		} catch (XmlParseException e) {
-			throw new ProxyException(e);
-		} catch (IOException e) {
+		} catch (XmlParseException | IOException e) {
 			throw new ProxyException(e);
 		}
 	}
@@ -185,7 +184,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 			return Arrays.asList(override.split(";"));
 		}
 
-		List<String> acceptedInterfaces = new ArrayList<String>();
+		List<String> acceptedInterfaces = new ArrayList<>();
 		Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 		while (interfaces.hasMoreElements()) {
 			NetworkInterface ni = interfaces.nextElement();
@@ -241,7 +240,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 
 	private ProxySelector installSimpleHostFilter(Dict proxySettings, ProxySelector result) {
 		if (isActive(proxySettings.get("ExcludeSimpleHostnames"))) {
-			List<UriFilter> localBypassFilter = new ArrayList<UriFilter>();
+			List<UriFilter> localBypassFilter = new ArrayList<>();
 			localBypassFilter.add(new IELocalByPassFilter());
 			result = new ProxyBypassListSelector(localBypassFilter, result);
 		}
@@ -260,7 +259,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 
 	private ProxySelector installExceptionList(Dict proxySettings, ProxySelector result) {
 		List<?> proxyExceptions = (List<?>) proxySettings.get("ExceptionsList");
-		if (proxyExceptions != null && proxyExceptions.size() > 0) {
+		if (proxyExceptions != null && !proxyExceptions.isEmpty()) {
 			Logger.log(getClass(), LogLevel.TRACE, "OSX uses proxy bypass list: {}", proxyExceptions);
 			String noProxyList = toCommaSeparatedString(proxyExceptions);
 			result = new ProxyBypassListSelector(noProxyList, result);

@@ -3,6 +3,7 @@ package com.github.markusbernhardt.proxy.search.browser.firefox;
 import java.io.IOException;
 import java.net.ProxySelector;
 import java.util.Properties;
+
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.desktop.DesktopProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.wpad.WpadProxySearchStrategy;
@@ -225,7 +226,7 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
 
 	private boolean isProxyShared(Properties settings) {
 		return Boolean.TRUE.toString()
-		        .equals(settings.getProperty("network.proxy.share_proxy_settings", "false").toLowerCase());
+		        .equalsIgnoreCase(settings.getProperty("network.proxy.share_proxy_settings", "false"));
 	}
 
 	/*************************************************************************

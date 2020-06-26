@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+
+import com.github.markusbernhardt.proxy.util.Logger;
+import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 /**
  * This class represents a Socket for sending DHCP Messages
@@ -23,7 +25,7 @@ public class DHCPSocket extends DatagramSocket {
 	/**
 	 * Default socket timeout (1 second)
 	 */
-	private int SOCKET_TIMEOUT = 1000;
+	private static final int SOCKET_TIMEOUT = 1000;
 
 	/**
 	 * Default MTU (Maximum Transmission Unit) for ethernet (in bytes)
@@ -42,7 +44,7 @@ public class DHCPSocket extends DatagramSocket {
 	 */
 	public DHCPSocket(int inPort) throws SocketException {
 		super(inPort);
-		setSoTimeout(this.SOCKET_TIMEOUT);
+		setSoTimeout(SOCKET_TIMEOUT);
 	}
 
 	/**
@@ -58,7 +60,7 @@ public class DHCPSocket extends DatagramSocket {
 	 */
 	public DHCPSocket(int inPort, InetAddress lAddr) throws SocketException {
 		super(inPort, lAddr);
-		setSoTimeout(this.SOCKET_TIMEOUT);
+		setSoTimeout(SOCKET_TIMEOUT);
 	}
 
 	/**
@@ -81,7 +83,7 @@ public class DHCPSocket extends DatagramSocket {
 	}
 
 	/**
-	 * Sends a DHCPMessage object to a predifined host.
+	 * Sends a DHCPMessage object to a predefined host.
 	 * 
 	 * @param inMessage
 	 *            Well-formed DHCPMessage to be sent to a server
@@ -90,12 +92,12 @@ public class DHCPSocket extends DatagramSocket {
 	 *             If the message could not be sent.
 	 */
 	public synchronized void send(DHCPMessage inMessage) throws IOException {
-		byte data[] = new byte[this.mtu];
-		data = inMessage.externalize();
+		byte[] data = inMessage.externalize();
 		InetAddress dest = null;
 		try {
 			dest = InetAddress.getByName(inMessage.getDestinationAddress());
 		} catch (UnknownHostException e) {
+			Logger.log(getClass(), LogLevel.ERROR, "Host {} not found", inMessage.getDestinationAddress());
 		}
 
 		DatagramPacket outgoing = new DatagramPacket(data, data.length, dest, inMessage.getPort());

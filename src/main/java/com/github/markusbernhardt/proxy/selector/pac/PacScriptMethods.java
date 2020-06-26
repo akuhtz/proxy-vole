@@ -473,14 +473,14 @@ public class PacScriptMethods implements ScriptMethods {
 		if (value instanceof Number) {
 			int n = ((Number) value).intValue();
 			if (n <= 31) {
-				// Its a day
+				// It's a day
 				if (params.get(DAY1) == null) {
 					params.put(DAY1, n);
 				} else {
 					params.put(DAY2, n);
 				}
 			} else {
-				// Its a year
+				// It's a year
 				if (params.get(YEAR1) == null) {
 					params.put(YEAR1, n);
 				} else {
@@ -492,7 +492,7 @@ public class PacScriptMethods implements ScriptMethods {
 		if (value instanceof String) {
 			int n = MONTH.indexOf(((String) value).toUpperCase());
 			if (n > -1) {
-				// Its a month
+				// It's a month
 				if (params.get(MONTH1) == null) {
 					params.put(MONTH1, n);
 				} else {
