@@ -152,7 +152,6 @@
             <!-- no 'uses' osgi directive -->
             <_nouses>true</_nouses>
             <_snapshot>${osgi-version-qualifier}</_snapshot>
-            <Bundle-SymbolicName>${bundle-symbolicname}</Bundle-SymbolicName>
           </instructions>
         </configuration>
         <executions>
