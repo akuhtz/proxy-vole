@@ -72,7 +72,7 @@
 		</exclusion>
 	  </exclusions>
     </dependency>
-	
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -96,12 +96,12 @@
       <dependency>
         <groupId>net.java.dev.jna</groupId>
         <artifactId>jna</artifactId>
-        <version>5.3.1</version>
+        <version>5.6.0</version>
       </dependency>
       <dependency>
         <groupId>net.java.dev.jna</groupId>
         <artifactId>jna-platform</artifactId>
-        <version>5.3.1</version>
+        <version>5.6.0</version>
       </dependency>
       <dependency>
         <groupId>org.ini4j</groupId>
@@ -110,13 +110,8 @@
       </dependency>
       <dependency>
         <groupId>org.javadelight</groupId>
-        <artifactId>delight-rhino-sandbox</artifactId>
-        <version>0.0.11</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mozilla</groupId>
-        <artifactId>rhino-runtime</artifactId>
-        <version>1.7.12</version>
+        <artifactId>delight-nashorn-sandbox</artifactId>
+        <version>0.1.28</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -378,7 +373,7 @@
                             <gpgArguments>
                                 <arg>--pinentry-mode</arg>
                                 <arg>loopback</arg>
-                            </gpgArguments>							
+                            </gpgArguments>
                         </configuration>
                         <executions>
                             <execution>
