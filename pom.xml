@@ -58,21 +58,10 @@
       <groupId>org.ini4j</groupId>
       <artifactId>ini4j</artifactId>
     </dependency>
-	<dependency>
-	  <groupId>org.mozilla</groupId>
-	  <artifactId>rhino-runtime</artifactId>
-	</dependency>
     <dependency>
       <groupId>org.javadelight</groupId>
       <artifactId>delight-rhino-sandbox</artifactId>
-	  <exclusions>
-		<exclusion>
-		  <groupId>org.mozilla</groupId>
-		  <artifactId>rhino</artifactId>
-		</exclusion>
-	  </exclusions>
     </dependency>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -110,8 +99,8 @@
       </dependency>
       <dependency>
         <groupId>org.javadelight</groupId>
-        <artifactId>delight-nashorn-sandbox</artifactId>
-        <version>0.1.28</version>
+        <artifactId>delight-rhino-sandbox</artifactId>
+        <version>0.0.12</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
