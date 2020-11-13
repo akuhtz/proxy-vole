@@ -13,7 +13,7 @@ import com.sun.jna.win32.W32APIOptions;
  */
 public interface WinHttp extends StdCallLibrary {
 
-	WinHttp INSTANCE = (WinHttp) Native.load("winhttp", WinHttp.class, W32APIOptions.UNICODE_OPTIONS);
+	WinHttp INSTANCE = Native.load("winhttp", WinHttp.class, W32APIOptions.UNICODE_OPTIONS);
 
 	/**
 	 * Use DHCP to locate the proxy auto-configuration file.
@@ -35,7 +35,7 @@ public interface WinHttp extends StdCallLibrary {
          * Returned if WinHTTP was unable to discover the URL of the 
          * Proxy Auto-Configuration (PAC) file using the WPAD method.
          */
-        int ERROR_WINHTTP_AUTODETECTION_FAILED = 12180;
+	int ERROR_WINHTTP_AUTODETECTION_FAILED = 12180;
         
         
 	/**

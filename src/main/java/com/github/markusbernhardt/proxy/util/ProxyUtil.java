@@ -1,16 +1,24 @@
 package com.github.markusbernhardt.proxy.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.Proxy;
+import java.net.ProxySelector;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
+import com.github.markusbernhardt.proxy.selector.fixed.FixedSocksSelector;
+import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacScriptSource;
 import com.github.markusbernhardt.proxy.selector.pac.UrlPacScriptSource;
+import com.github.markusbernhardt.proxy.selector.whitelist.ProxyBypassListSelector;
+import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 /*****************************************************************************
  * Small helper class for some common utility methods.
@@ -53,7 +61,7 @@ public class ProxyUtil {
 			}
 			return new FixedProxySelector(host.trim(), port);
 		} catch (MalformedURLException e) {
-			Logger.log(ProxyUtil.class, Logger.LogLevel.WARNING, "Cannot parse Proxy Settings {}", proxyVar);
+			Logger.log(ProxyUtil.class, LogLevel.WARNING, "Cannot parse Proxy Settings {}", proxyVar);
 			return null;
 		}
 	}
@@ -114,6 +122,118 @@ public class ProxyUtil {
 			hostOrIP = hostOrIP.substring(0, hostOrIP.length() - 1);
 		}
 		return hostOrIP;
+	}
+
+	/*************************************************************************
+	 * Installs the proxy exclude list on the given selector.
+	 *
+	 * @param bypassList
+	 *            the list of urls / hostnames to ignore.
+	 * @param ps
+	 *            the proxy selector to wrap.
+	 * @return a wrapped proxy selector that will handle the bypass list.
+	 ************************************************************************/
+
+	public static ProxySelector setByPassListOnSelector(String bypassList, ProtocolDispatchSelector ps) {
+		if (bypassList != null && bypassList.trim().length() > 0) {
+			return new ProxyBypassListSelector(bypassList.replace(';', ','), ps);
+		}
+		return ps;
+	}
+
+	/*************************************************************************
+	 * Installs a fallback selector that is used whenever no protocol specific
+	 * selector is defined.
+	 *
+	 * @param settings
+	 *            to take the proxy settings from.
+	 * @param ps
+	 *            to install the created selector on.
+	 ************************************************************************/
+
+	private static void addFallbackSelector(Properties settings, ProtocolDispatchSelector ps) {
+		String proxy = settings.getProperty("default");
+		if (proxy != null) {
+			ps.setFallbackSelector(ProxyUtil.parseProxySettings(proxy));
+		}
+	}
+
+	/*************************************************************************
+	 * Creates a selector for a given protocol. The proxy will be taken from the
+	 * settings and installed on the dispatch selector.
+	 *
+	 * @param settings
+	 *            to take the proxy settings from.
+	 * @param protocol
+	 *            to create a selector for.
+	 * @param ps
+	 *            to install the created selector on.
+	 ************************************************************************/
+
+	private static void addSelectorForProtocol(Properties settings, String protocol, ProtocolDispatchSelector ps) {
+		String proxy = settings.getProperty(protocol);
+		if (proxy != null) {
+			FixedProxySelector protocolSelector = ProxyUtil.parseProxySettings(proxy);
+			ps.setSelector(protocol, protocolSelector);
+		}
+	}
+
+
+	/*************************************************************************
+	 * Parses the proxy list and splits it by protocol.
+	 *
+	 * @param proxyString
+	 *            the proxy list string
+	 * @return Properties with separated settings.
+	 ************************************************************************/
+
+	public static Properties parseProxyList(String proxyString){
+		Properties p = new Properties();
+		if (proxyString.indexOf('=') == -1) {
+			p.setProperty("default", proxyString);
+		} else {
+			try {
+				proxyString = proxyString.replace(';', '\n');
+				p.load(new ByteArrayInputStream(proxyString.getBytes("ISO-8859-1")));
+			} catch (IOException e) {
+				Logger.log(ProxyUtil.class, LogLevel.ERROR, "Error reading IE settings as properties: {0}", e);
+			}
+		}
+		return p;
+	}
+
+	public static ProtocolDispatchSelector buildProtocolDispatchSelector(Properties properties) {
+		ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
+		addSelectorForProtocol(properties, "http", ps);
+		addSelectorForProtocol(properties, "https", ps);
+		addSelectorForProtocol(properties, "ftp", ps);
+		addSelectorForProtocol(properties, "gopher", ps);
+
+		// these are the "default" settings, which may be overridden by "socks" (below)
+		addFallbackSelector(properties, ps);
+
+		// "socks" is a special case: it can be used as a fallback for the protocols above (e.g. http),
+		// so it must be specified as such (URLs won't specify socks:// that addSelectorForProtocol() would
+		// use as lookup key).
+		String socksProperties = properties.getProperty("socks");
+		if (socksProperties != null) {
+			String[] hostAndPort = socksProperties.split(":");
+			String host = "";
+			int port = 0;
+			if (hostAndPort.length > 0) {
+				host = hostAndPort[0];
+			}
+			if (hostAndPort.length > 1) {
+				try {
+					port = Integer.parseInt(hostAndPort[1]);
+				} catch (NumberFormatException e) {
+					Logger.log(ProxyUtil.class, LogLevel.WARNING, "Cannot parse SOCKS proxy port {0}", hostAndPort[1]);
+				}
+			}
+			ps.setFallbackSelector(new FixedSocksSelector(host, port));
+		}
+
+		return ps;
 	}
 
 }
