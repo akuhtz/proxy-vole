@@ -28,17 +28,12 @@ import com.sun.jna.platform.win32.WinDef.DWORD;
  * The settings are read by invoking native Windows API methods.
  * PAC files (JavaScript) are evaluated with the Nashorn engine.
  *
+ * @author Victor Kropp, Copyright 2020
  * @author Kei Sugimoto, Copyright 2018
  ****************************************************************************/
 
 public class WinProxySelector extends ProxySelector {
-
-  private final ProxySelector fallbackSelector;
   private ProxySelector impl;
-
-  public WinProxySelector(ProxySelector fallbackSelector) {
-    this.fallbackSelector = fallbackSelector;
-  }
 
   @Override
   public List<Proxy> select(URI uri) {
@@ -77,7 +72,7 @@ public class WinProxySelector extends ProxySelector {
       addIfNotNull(selectors, createWinHttpProxySelector(winHttpProxyConfig));
     }
 
-    return new ListProxySelector(selectors, fallbackSelector);
+    return new ListProxySelector(selectors, null);
   }
 
   private void addIfNotNull(List<ProxySelector> l, ProxySelector selector) {

@@ -1,20 +1,15 @@
 package com.github.markusbernhardt.proxy.search.desktop.win;
 
-import java.net.ProxySelector;
-import java.util.Properties;
-
-import com.github.markusbernhardt.proxy.jna.win.WinHttp;
-import com.github.markusbernhardt.proxy.jna.win.WinHttpHelpers;
-import com.github.markusbernhardt.proxy.jna.win.WinHttpProxyInfo;
-import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
-import com.github.markusbernhardt.proxy.util.Logger;
-import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.ProxyException;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.net.ProxySelector;
 
 /*****************************************************************************
  * Extracts the proxy settings from the windows registry. This will read the
  * windows system proxy settings.
  *
+ * @author Victor Kropp, Copyright 2020
  * @author Markus Bernhardt, Copyright 2016
  * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
@@ -48,8 +43,8 @@ public class WinProxySearchStrategy extends CommonWindowsSearchStrategy {
 	 * uses WINHTTP_ACCESS_TYPE_NAMED_PROXY.
 	 */
 	static final int WINHTTP_ACCESS_TYPE_NAMED_PROXY = 3;
-	
-	
+
+
 	/*************************************************************************
 	 * Constructor
 	 ************************************************************************/
@@ -66,17 +61,7 @@ public class WinProxySearchStrategy extends CommonWindowsSearchStrategy {
 
 	@Override
 	public ProxySelector getProxySelector() throws ProxyException {
-
-		Logger.log(getClass(), LogLevel.TRACE, "Detecting Windows proxy settings");
-
-		WinProxyConfig windowsProxyConfig = readWindowsProxyConfig();
-
-		if (windowsProxyConfig.getAccessType() == WINHTTP_ACCESS_TYPE_NO_PROXY) {
-			return null;
-		} else {
-			return createFixedProxySelector(windowsProxyConfig);
-		}
-
+		return new WinProxySelector();
 	}
 
 	/*************************************************************************
@@ -88,48 +73,5 @@ public class WinProxySearchStrategy extends CommonWindowsSearchStrategy {
 	@Override
 	public String getName() {
 		return "windows";
-	}
-
-	public WinProxyConfig readWindowsProxyConfig() {
-
-		// Retrieve the Win proxy configuration.
-		WinHttpProxyInfo winHttpProxyInfo = new WinHttpProxyInfo();
-		boolean result = WinHttpHelpers.WINHTTP_INSTANCE.WinHttpGetDefaultProxyConfiguration(winHttpProxyInfo);
-		if (!result) {
-			return null;
-		}
-
-		// Create WinProxyConfig instance
-		return new WinProxyConfig(
-				winHttpProxyInfo.dwAccessType != null ? winHttpProxyInfo.dwAccessType.intValue() : null,
-				winHttpProxyInfo.lpszProxy != null ? winHttpProxyInfo.lpszProxy.getValue() : null,
-				winHttpProxyInfo.lpszProxyBypass != null ? winHttpProxyInfo.lpszProxyBypass.getValue() : null);
-	}
-
-	/*************************************************************************
-	 * Parses the proxy settings into an ProxySelector.
-	 *
-	 * @param winProxySettings
-	 *            the settings to use.
-	 * @return a ProxySelector, null if no settings are set.
-	 * @throws ProxyException
-	 *             on error.
-	 ************************************************************************/
-
-	private ProxySelector createFixedProxySelector(WinProxyConfig winProxyConfig) throws ProxyException {
-		String proxyString = winProxyConfig.getProxy();
-		String bypassList = winProxyConfig.getProxyBypass();
-		if (proxyString == null) {
-			return null;
-		}
-		Logger.log(getClass(), LogLevel.TRACE, "Windows uses manual settings: {} with bypass list: {}", proxyString,
-		        bypassList);
-
-		Properties p = parseProxyList(proxyString);
-
-		ProtocolDispatchSelector ps = buildProtocolDispatchSelector(p);
-
-		ProxySelector result = setByPassListOnSelector(bypassList, ps);
-		return result;
 	}
 }
