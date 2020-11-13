@@ -70,8 +70,8 @@ public class ProxySearch implements ProxySearchStrategy {
 		BROWSER,
 		/// Use Firefox settings
 		FIREFOX,
-		/// Use InternetExplorer settings
-		IE,
+		/// Deprecated, use Strategy.WIN instead
+		@Deprecated IE,
 		/// Use environment variables for proxy settings.
 		ENV_VAR,
 		/// Use windows default proxy settings.

@@ -18,9 +18,12 @@ import com.sun.jna.platform.win32.WinDef.DWORD;
  * Extracts the proxy settings for Microsoft Internet Explorer. The settings are
  * read by invoking native Windows API methods.
  *
+ * @deprecated Use WinProxySearchStrategy instead, which includes both Windows and IE settings
+ *
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
 
+@Deprecated
 public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 
 	/**
