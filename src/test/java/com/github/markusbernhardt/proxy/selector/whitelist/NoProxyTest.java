@@ -1,6 +1,6 @@
 package com.github.markusbernhardt.proxy.selector.whitelist;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.Proxy;
 import java.net.ProxySelector;
@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;

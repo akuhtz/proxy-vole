@@ -1,6 +1,6 @@
 package com.github.markusbernhardt.proxy.search.java;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.Proxy;
 import java.net.ProxySelector;
@@ -8,13 +8,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
-import com.github.markusbernhardt.proxy.search.java.JavaProxySearchStrategy;
 
 /*****************************************************************************
  * Unit tests for the Java proxy search strategy.
@@ -30,7 +29,7 @@ public class JavaProxySearchTest {
 	/*************************************************************************
 	 * Setup before the tests.
 	 ************************************************************************/
-	@BeforeClass
+	@BeforeAll
 	public static void setupClass() {
 		System.setProperty("http.proxyHost", "http_proxy.unit-test.invalid");
 		System.setProperty("http.proxyPort", "8090");
@@ -47,7 +46,7 @@ public class JavaProxySearchTest {
 	/*************************************************************************
 	 * Setup before the tests.
 	 ************************************************************************/
-	@AfterClass
+	@AfterAll
 	public static void teardownClass() {
 		System.clearProperty("http.proxyHost");
 		System.clearProperty("http.proxyPort");
@@ -64,7 +63,7 @@ public class JavaProxySearchTest {
 	/*************************************************************************
 	 * Setup before every single test
 	 ************************************************************************/
-	@Before
+	@BeforeEach
 	public void setup() {
 		this.selector = new JavaProxySearchStrategy().getProxySelector();
 	}

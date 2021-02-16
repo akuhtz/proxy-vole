@@ -1,10 +1,10 @@
 package com.github.markusbernhardt.proxy.selector.java;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.net.ProxySelector;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.markusbernhardt.proxy.search.java.JavaProxySearchStrategy;
 

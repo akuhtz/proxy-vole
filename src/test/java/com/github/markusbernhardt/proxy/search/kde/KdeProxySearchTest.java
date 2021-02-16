@@ -1,27 +1,33 @@
 package com.github.markusbernhardt.proxy.search.kde;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.EnvironmentVariables;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.search.desktop.kde.KdeProxySearchStrategy;
 import com.github.markusbernhardt.proxy.util.ProxyException;
+
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 /*****************************************************************************
  * Unit tests for the KDE settings search strategy. For every test the
  * "user.home" system property is switched to the test/data folder where we
  * provide some KDE config files prepared for the test cases.
  * 
- * If the env tests fail you need to set the followingenvironment variables:
+ * If the env tests fail you need to set the following environment variables:
  * <p>
  * HTTP_PROXY = http://http_proxy.unit-test.invalid:8090 <br>
  * HTTPS_PROXY = http://https_proxy.unit-test.invalid:8091 <br>
@@ -32,15 +38,17 @@ import com.github.markusbernhardt.proxy.util.ProxyException;
  * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
+@TestInstance(Lifecycle.PER_CLASS)
+@ExtendWith(SystemStubsExtension.class)
 public class KdeProxySearchTest {
 
   /*************************************************************************
    * Needed to set environment variables
    ************************************************************************/
-  @Rule
+  @SystemStub
   public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
-  @Before
+  @BeforeAll
   public void setupClass() {
     environmentVariables.set("HTTP_PROXY", "http://http_proxy.unit-test.invalid:8090");
     environmentVariables.set("HTTPS_PROXY", "http://https_proxy.unit-test.invalid:8091");

@@ -1,13 +1,13 @@
 package com.github.markusbernhardt.proxy.selector.misc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.net.Proxy;
 import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
@@ -23,7 +23,7 @@ public class ProtocolDispatchTest {
 
 	private static ProtocolDispatchSelector ps;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setup() {
 		ps = new ProtocolDispatchSelector();
 		ps.setSelector("http", new FixedProxySelector(TestUtil.HTTP_TEST_PROXY));

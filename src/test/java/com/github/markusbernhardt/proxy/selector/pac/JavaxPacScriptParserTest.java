@@ -4,10 +4,10 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Calendar;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.util.ProxyException;
@@ -25,7 +25,7 @@ public class JavaxPacScriptParserTest {
      * Set calendar for date and time base tests. Current date for all tests is: 15. December 1994 12:00.00 its a
      * Thursday
      ************************************************************************/
-    @BeforeClass
+    @BeforeAll
     public static void setup() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 1994);
@@ -43,7 +43,7 @@ public class JavaxPacScriptParserTest {
     /*************************************************************************
      * Cleanup after the tests.
      ************************************************************************/
-    @AfterClass
+    @AfterAll
     public static void teadDown() {
         // JavaxPacScriptParser.setCurrentTime(null);
     }
@@ -88,7 +88,7 @@ public class JavaxPacScriptParserTest {
     public void testSpaceInScript() throws ProxyException, MalformedURLException {
         PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("test3.pac")));
         String result = p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
-        Assert.assertNull(result);
+        Assertions.assertThat(result).isNull();
     }
 
     /*************************************************************************
@@ -145,7 +145,7 @@ public class JavaxPacScriptParserTest {
     public void methodsShouldReturnJsStrings() throws ProxyException, MalformedURLException {
         PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testReturnTypes.pac")));
         String actual = p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
-        Assert.assertEquals("number boolean string", actual);
+        Assertions.assertThat(actual).isEqualTo("number boolean string");
     }
 
     /*************************************************************************
@@ -156,10 +156,10 @@ public class JavaxPacScriptParserTest {
      * @throws MalformedURLException
      *             on URL erros
      ************************************************************************/
-    @Test(expected = Exception.class)
+    @Test
     public void shouldNotExecuteCodeInPac() throws ProxyException, MalformedURLException {
         PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testRemoteCodeExecution.pac")));
-        p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host.does.not.matter");
+        Assertions.assertThatThrownBy(()-> p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host.does.not.matter")).isInstanceOf(Exception.class);
     }
 
     /*************************************************************************

@@ -1,21 +1,25 @@
 package com.github.markusbernhardt.proxy.search.browser;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.ProxySelector;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.search.browser.ie.IELocalByPassFilter;
-import com.github.markusbernhardt.proxy.search.browser.ie.IEProxySearchStrategy;
-import com.github.markusbernhardt.proxy.util.PlatformUtil;
+import com.github.markusbernhardt.proxy.search.desktop.win.WinProxySearchStrategy;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.UriFilter;
-import com.github.markusbernhardt.proxy.util.PlatformUtil.Platform;
 
 /*****************************************************************************
  * Unit tests for the InternetExplorer search. Only limited testing as this only
@@ -35,13 +39,15 @@ public class IeTest {
 	 *             on proxy detection error.
 	 ************************************************************************/
 	@Test
+	@EnabledOnOs(OS.WINDOWS)
 	public void testInvoke() throws ProxyException {
-		if (Platform.WIN.equals(PlatformUtil.getCurrentPlattform())) {
-			IEProxySearchStrategy st = new IEProxySearchStrategy();
+		WinProxySearchStrategy st = new WinProxySearchStrategy();
 
-			// Try at least to invoke it and test if the dll does not crash
-			st.getProxySelector();
-		}
+		// Try at least to invoke it and test if the dll does not crash
+		ProxySelector ps = st.getProxySelector();
+		
+        List<Proxy> result = ps.select(TestUtil.HTTPS_TEST_URI);
+        assertEquals(Proxy.NO_PROXY, result.get(0));
 	}
 
 	/*************************************************************************

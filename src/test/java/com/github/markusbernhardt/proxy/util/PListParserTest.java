@@ -1,14 +1,14 @@
 package com.github.markusbernhardt.proxy.util;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.util.PListParser.Dict;
@@ -30,7 +30,7 @@ public class PListParserTest {
 	/*************************************************************************
 	 * Setup the dictionary from the test data file.
 	 ************************************************************************/
-	@BeforeClass
+	@BeforeAll
 	public static void setupClass() throws XmlParseException, IOException {
 		pList = PListParser.load(new File(TEST_SETTINGS));
 	}

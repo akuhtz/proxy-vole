@@ -1,15 +1,15 @@
 package com.github.markusbernhardt.proxy.search.browser;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.search.browser.firefox.FirefoxProxySearchStrategy;
@@ -29,13 +29,13 @@ public class FirefoxTest {
     /*************************************************************************
      * Setup environment for tests.
      ************************************************************************/
-    @BeforeClass
+    @BeforeAll
     public static void setup() {
         // Fake the OS for this tests.
         orgOS = System.setProperty("os.name", "Linux");
     }
 
-    @AfterClass
+    @AfterAll
     public static void cleanup() {
         // Restore the original OS after this tests.
         System.setProperty("os.name", orgOS);

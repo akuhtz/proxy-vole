@@ -1,6 +1,6 @@
 package com.github.markusbernhardt.proxy.selector.misc;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.net.Proxy;
@@ -10,8 +10,10 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 
@@ -22,6 +24,7 @@ import com.github.markusbernhardt.proxy.TestUtil;
  * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
+@TestInstance(Lifecycle.PER_CLASS)
 public class ProxyListFallbackSelectorTest {
 
 	private ProxyListFallbackSelector selector;
@@ -29,7 +32,7 @@ public class ProxyListFallbackSelectorTest {
 	/*************************************************************************
 	 * Setup before tests.
 	 ************************************************************************/
-	@Before
+	@BeforeAll
 	public void setup() {
 		this.selector = new ProxyListFallbackSelector(new ProxySelector() {
 			@Override
