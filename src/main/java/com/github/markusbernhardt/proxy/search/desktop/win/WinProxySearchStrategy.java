@@ -1,9 +1,8 @@
 package com.github.markusbernhardt.proxy.search.desktop.win;
 
-import com.github.markusbernhardt.proxy.util.ProxyException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.net.ProxySelector;
+
+import com.github.markusbernhardt.proxy.util.ProxyException;
 
 /*****************************************************************************
  * Extracts the proxy settings from the windows registry. This will read the
