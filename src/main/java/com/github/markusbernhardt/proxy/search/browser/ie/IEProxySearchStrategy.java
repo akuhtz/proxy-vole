@@ -83,12 +83,9 @@ public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 
 		// Create IEProxyConfig instance
 		return new IEProxyConfig(winHttpCurrentUserIeProxyConfig.fAutoDetect,
-		        winHttpCurrentUserIeProxyConfig.lpszAutoConfigUrl != null
-		                ? winHttpCurrentUserIeProxyConfig.lpszAutoConfigUrl.getValue() : null,
-		        winHttpCurrentUserIeProxyConfig.lpszProxy != null ? winHttpCurrentUserIeProxyConfig.lpszProxy.getValue()
-		                : null,
-		        winHttpCurrentUserIeProxyConfig.lpszProxyBypass != null
-		                ? winHttpCurrentUserIeProxyConfig.lpszProxyBypass.getValue() : null);
+		        WinHttpHelpers.getAndFreeGlobalString(winHttpCurrentUserIeProxyConfig.lpszAutoConfigUrl),
+		        WinHttpHelpers.getAndFreeGlobalString(winHttpCurrentUserIeProxyConfig.lpszProxy),
+		        WinHttpHelpers.getAndFreeGlobalString(winHttpCurrentUserIeProxyConfig.lpszProxyBypass));
 
 	}
 

@@ -4,6 +4,7 @@ import java.net.ProxySelector;
 import java.util.Properties;
 
 import com.github.markusbernhardt.proxy.jna.win.WinHttp;
+import com.github.markusbernhardt.proxy.jna.win.WinHttpHelpers;
 import com.github.markusbernhardt.proxy.jna.win.WinHttpProxyInfo;
 import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.util.Logger;
@@ -100,9 +101,9 @@ public class WinProxySearchStrategy extends CommonWindowsSearchStrategy {
 
 		// Create WinProxyConfig instance
 		return new WinProxyConfig(
-				winHttpProxyInfo.dwAccessType != null ? winHttpProxyInfo.dwAccessType.intValue() : null,
-				winHttpProxyInfo.lpszProxy != null ? winHttpProxyInfo.lpszProxy.getValue() : null,
-				winHttpProxyInfo.lpszProxyBypass != null ? winHttpProxyInfo.lpszProxyBypass.getValue() : null);
+				winHttpProxyInfo.dwAccessType != null ? winHttpProxyInfo.dwAccessType.intValue() : 0,
+				WinHttpHelpers.getAndFreeGlobalString(winHttpProxyInfo.lpszProxy),
+				WinHttpHelpers.getAndFreeGlobalString(winHttpProxyInfo.lpszProxyBypass));
 	}
 
 	/*************************************************************************
