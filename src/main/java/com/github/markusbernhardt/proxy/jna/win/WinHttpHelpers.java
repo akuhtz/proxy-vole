@@ -26,9 +26,6 @@ public class WinHttpHelpers {
 
     /**
      * Finds the URL for the Proxy Auto-Configuration (PAC) file using WPAD.
-     * This is merely a wrapper around
-     * {@link WinHttp#WinHttpDetectAutoProxyConfigUrl(com.sun.jna.platform.win32.WinDef.DWORD, com.github.markusbernhardt.proxy.jna.win.WTypes2.LPWSTRByReference)
-     * WinHttpDetectAutoProxyConfigUrl}
      *
      * <p>
      * This method is blocking and may take some time to execute.

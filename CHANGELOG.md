@@ -3,7 +3,7 @@ This file contains the change log.
 
 ## 1.0.17
 * Fixed issue #16: Make ProxySearch a bit more extendable
-* Fixed issue #37: Proxy-vole crashes in JNA/native code on Windows 11 and Java 8
+* Fixed issue #37: Proxy-vole crashes in JNA/native code on Windows 11 and Java 8. Thanks to dtuma!
 
 ## 1.0.16
 * Fixed issue #35: NullPointerException in OsxProxySearchStrategy.getProxySelector
