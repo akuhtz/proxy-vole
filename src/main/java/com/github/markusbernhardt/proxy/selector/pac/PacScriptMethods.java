@@ -7,6 +7,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -228,6 +229,7 @@ public class PacScriptMethods implements ScriptMethods {
 				return overrideIP.trim();
 			}
 			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+			List<InetAddress> localAddresses = new ArrayList<>();
 			while (interfaces.hasMoreElements()) {
 				NetworkInterface current = interfaces.nextElement();
 				if (!current.isUp() || current.isLoopback() || current.isVirtual()) {
@@ -237,12 +239,31 @@ public class PacScriptMethods implements ScriptMethods {
 				while (addresses.hasMoreElements()) {
 					InetAddress adr = addresses.nextElement();
 					if (cl.isInstance(adr)) {
-						Logger.log(JavaxPacScriptParser.class, LogLevel.TRACE, "Local address resolved to {}", adr);
-						return adr.getHostAddress();
+					    localAddresses.add(adr);
 					}
 				}
 			}
-			return "";
+			if (localAddresses.isEmpty()) {
+	            return "";
+			} else {
+			    InetAddress localAddress = localAddresses.get(0);
+			    if (localAddresses.size() > 1) {
+                    // if we have multiple addresses we prefer the localHost address
+			        if (Inet4Address.class.equals(cl)) {
+			            InetAddress localHost = Inet4Address.getLocalHost();
+			            if (localAddresses.contains(localHost)) {
+			                localAddress = localHost;   
+			            }
+			        } else if (Inet6Address.class.equals(cl)) { 
+                        InetAddress localHost = Inet6Address.getLocalHost();
+                        if (localAddresses.contains(localHost)) {
+                            localAddress = localHost;   
+                        }
+			        }
+			    }
+                Logger.log(JavaxPacScriptParser.class, LogLevel.TRACE, "Local address resolved to {}", localAddress);
+                return localAddress.getHostAddress();
+			}
 		} catch (IOException e) {
 			Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "Local address not resolvable.");
 			return "";
