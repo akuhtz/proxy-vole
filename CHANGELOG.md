@@ -1,6 +1,9 @@
 # Change Log
 This file contains the change log.
 
+## 1.0.18
+* Fixed issue #40: Local address resolution improvement
+
 ## 1.0.17
 * Fixed issue #16: Make ProxySearch a bit more extendable
 * Fixed issue #37: Proxy-vole crashes in JNA/native code on Windows 11 and Java 8. Thanks to dtuma!
