@@ -17,7 +17,13 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: ${{ matrix.java }}
-          cache: 'maven'
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2          
       - name: Show Maven version
         run: mvn --version
       - name: Build with Maven
