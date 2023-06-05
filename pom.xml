@@ -175,7 +175,6 @@
         <!-- generate the osgi manifest -->
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-		<version>5.1.1</version>
         <extensions>true</extensions>
         <configuration>
           <!-- see http://felix.apache.org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html -->
@@ -195,16 +194,9 @@
         </executions>
       </plugin>
       <plugin>
-        <!-- set the deploy plugin version -->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>3.0.0-M1</version>
-      </plugin>
-      <plugin>
         <!-- set the compile target, optimize -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
@@ -212,38 +204,26 @@
         </configuration>
       </plugin>
       <plugin>
-        <!-- also download sources and javadocs whenever possible -->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-eclipse-plugin</artifactId>
-        <version>2.10</version>
-        <configuration>
-          <downloadSources>${downloadSources}</downloadSources>
-          <downloadJavadocs>${downloadJavadocs}</downloadJavadocs>
-        </configuration>
-      </plugin>
-      <plugin>
-        <!-- compress and index the generated jar files -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.2.2</version>
-        <configuration>
-          <archive>
-            <compress>true</compress>
-            <index>true</index>
-          </archive>
-        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <!-- build the optional source.jar -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.2.1</version>
         <executions>
           <execution>
             <id>jar</id>
-            <phase>verify</phase>
             <goals>
               <goal>jar</goal>
+              <goal>test-jar</goal>
             </goals>
           </execution>
         </executions>
@@ -252,26 +232,16 @@
         <!-- build the optional javadoc.jar -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>jar</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <!-- add this to disable checking -->
-	        <configuration>
-	            <doclint>none</doclint>
-	            <source>8</source>
-	        </configuration>
-          </execution>
-        </executions>
+        <!-- add this to disable checking -->
+	    <configuration>
+	      <doclint>none</doclint>
+	      <source>8</source>
+	    </configuration>
       </plugin>
       <plugin>
         <!-- Build the fat jar with all dependencies -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.2.0</version>
         <configuration>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -292,9 +262,36 @@
           </execution>
         </executions>
       </plugin>
+      
     </plugins>
     <pluginManagement>
       <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.6.0</version>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <version>3.1.1</version>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.3.0</version>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.3.0</version>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.11.0</version>
+        </plugin>
+        
         <plugin>
             <groupId>org.sonatype.plugins</groupId>
             <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -303,18 +300,24 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.22.2</version>
+            <version>3.1.0</version>
         </plugin>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>3.0.1</version>
+            <version>3.1.0</version>
         </plugin>
 	    <plugin>
 	        <groupId>org.apache.maven.plugins</groupId>
 	        <artifactId>maven-javadoc-plugin</artifactId>
-	        <version>3.4.0</version>
+	        <version>3.5.0</version>
         </plugin>
+        <plugin>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>maven-bundle-plugin</artifactId>
+            <version>5.1.1</version>
+        </plugin>
+        
         <plugin>
           <!-- ignore enforce plugin in the m2e lifecycle -->
           <groupId>org.eclipse.m2e</groupId>
@@ -376,7 +379,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-enforcer-plugin</artifactId>
-						<version>3.0.0</version>
+						<version>3.3.0</version>
 						<executions>
 							<execution>
 								<id>enforce-no-snapshots</id>
