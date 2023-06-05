@@ -1,6 +1,10 @@
 # Change Log
 This file contains the change log.
 
+## 1.1.0
+* Update dependencies
+* Update maven plugins
+
 ## 1.0.18
 * Fixed issue #40: Local address resolution improvement
 
