@@ -1,6 +1,10 @@
 # Change Log
 This file contains the change log.
 
+## 1.1.1
+* Fixed issue #42: Log exception instead of writing to stderr. Thanks to poeschik!
+* Update dependencies
+
 ## 1.1.0
 * Update dependencies
 * Update maven plugins
