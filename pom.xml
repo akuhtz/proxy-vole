@@ -23,12 +23,12 @@
     <java.version>1.8</java.version>
 	<enforcer-no-snapshots.skip>false</enforcer-no-snapshots.skip>
 	
-	<jna.version>5.11.0</jna.version>
-	<junit-jupiter.version>5.9.3</junit-jupiter.version>
+	<jna.version>5.13.0</jna.version>
+	<junit-jupiter.version>5.10.0</junit-jupiter.version>
 	<assertj.version>3.24.2</assertj.version>
 	<system-stubs-jupiter.version>1.2.0</system-stubs-jupiter.version>
-	<slf4j.version>2.0.7</slf4j.version>
-    <logback.version>1.3.6</logback.version>
+	<slf4j.version>2.0.9</slf4j.version>
+    <logback.version>1.3.9</logback.version>
     <rhino-runtime.version>1.7.14</rhino-runtime.version>
     <delight-rhino-sandbox.version>0.0.17</delight-rhino-sandbox.version>
   </properties>
