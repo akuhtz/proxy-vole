@@ -197,7 +197,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
         }
       }
     } catch (SocketException e) {
-      e.printStackTrace();
+      Logger.log(getClass(), LogLevel.ERROR, "Error detecting script url via DHCP.", e);
     }
     return url;
   }
