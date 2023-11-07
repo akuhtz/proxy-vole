@@ -268,6 +268,7 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
 			Logger.log(getClass(), LogLevel.TRACE, "Firefox secure proxy is {}:{}", proxyHost, proxyPort);
 			ps.setSelector("https", new FixedProxySelector(proxyHost, proxyPort));
 			ps.setSelector("sftp", new FixedProxySelector(proxyHost, proxyPort));
+			ps.setSelector("wss", new FixedProxySelector(proxyHost, proxyPort));
 		}
 	}
 
