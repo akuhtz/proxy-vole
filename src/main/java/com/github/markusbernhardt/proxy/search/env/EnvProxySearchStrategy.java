@@ -120,6 +120,8 @@ public class EnvProxySearchStrategy implements ProxySearchStrategy {
 		Logger.log(getClass(), LogLevel.TRACE, "Https Proxy is {}", httpsPS == null ? this.httpsProxy : httpsPS);
 		ps.setSelector("https", httpsPS != null ? httpsPS : httpPS);
 
+		ps.setSelector("wss", httpsPS != null ? httpsPS : httpPS);
+
 		ProxySelector ftpPS = ProxyUtil.parseProxySettings(this.ftpProxy);
 		if (ftpPS != null) {
 			Logger.log(getClass(), LogLevel.TRACE, "Ftp Proxy is {}", this.ftpProxy);

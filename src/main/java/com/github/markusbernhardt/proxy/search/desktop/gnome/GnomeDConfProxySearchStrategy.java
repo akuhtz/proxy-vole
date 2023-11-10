@@ -272,6 +272,7 @@ public class GnomeDConfProxySearchStrategy implements ProxySearchStrategy {
 			Logger.log(getClass(), LogLevel.TRACE, "Gnome secure proxy is {}:{}", proxyHost, proxyPort);
 			ps.setSelector("https", new FixedProxySelector(proxyHost.trim(), proxyPort));
 			ps.setSelector("sftp", new FixedProxySelector(proxyHost.trim(), proxyPort));
+			ps.setSelector("wss", new FixedProxySelector(proxyHost.trim(), proxyPort));
 		}
 	}
 

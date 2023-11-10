@@ -189,6 +189,7 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 		if (httpsPS != null) {
 			Logger.log(getClass(), LogLevel.TRACE, "Kde https proxy is {}", proxyVar);
 			ps.setSelector("https", httpsPS);
+			ps.setSelector("wss", httpsPS);
 		}
 
 		proxyVar = settings.getProperty("ftpProxy", null);
