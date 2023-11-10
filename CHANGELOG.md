@@ -1,6 +1,10 @@
 # Change Log
 This file contains the change log.
 
+## 1.1.2
+* Fixed issue #43: Use secure proxy also for websocket protocol. Thanks to poeschik!
+* Update dependencies
+
 ## 1.1.1
 * Fixed issue #42: Log exception instead of writing to stderr. Thanks to poeschik!
 * Update dependencies
