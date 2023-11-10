@@ -28,7 +28,7 @@
 	<assertj.version>3.24.2</assertj.version>
 	<system-stubs-jupiter.version>2.0.3</system-stubs-jupiter.version>
 	<slf4j.version>2.0.9</slf4j.version>
-    <logback.version>1.3.11</logback.version>
+    <logback.version>1.4.11</logback.version>
     <rhino-runtime.version>1.7.14</rhino-runtime.version>
     <delight-rhino-sandbox.version>0.0.17</delight-rhino-sandbox.version>
   </properties>
