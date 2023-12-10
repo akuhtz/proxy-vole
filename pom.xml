@@ -23,7 +23,7 @@
     <java.version>1.8</java.version>
 	<enforcer-no-snapshots.skip>false</enforcer-no-snapshots.skip>
 	
-	<jna.version>5.13.0</jna.version>
+	<jna.version>5.14.0</jna.version>
 	<junit-jupiter.version>5.10.1</junit-jupiter.version>
 	<assertj.version>3.24.2</assertj.version>
 	<system-stubs-jupiter.version>2.0.3</system-stubs-jupiter.version>
