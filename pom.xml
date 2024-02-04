@@ -24,7 +24,7 @@
 	<enforcer-no-snapshots.skip>false</enforcer-no-snapshots.skip>
 	
 	<jna.version>5.14.0</jna.version>
-	<junit-jupiter.version>5.10.1</junit-jupiter.version>
+	<junit-jupiter.version>5.10.2</junit-jupiter.version>
 	<assertj.version>3.25.2</assertj.version>
 	<system-stubs-jupiter.version>2.0.3</system-stubs-jupiter.version>
 	<slf4j.version>2.0.9</slf4j.version>
