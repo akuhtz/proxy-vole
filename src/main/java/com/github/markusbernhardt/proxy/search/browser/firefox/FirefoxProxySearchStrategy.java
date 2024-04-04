@@ -18,6 +18,7 @@ import com.github.markusbernhardt.proxy.util.PlatformUtil;
 import com.github.markusbernhardt.proxy.util.PlatformUtil.Platform;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.ProxyUtil;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 
 /*****************************************************************************
  * Loads the Firefox3 proxy settings from the users Firefox3 settings. This will
@@ -170,7 +171,7 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
 		try {
 			Properties settings = settingsParser.parseSettings(profileScanner);
 			return settings;
-		} catch (IOException e) {
+		} catch (IOException | ConfigurationException e) {
 			throw new ProxyException("No Firefox installation found");
 		}
 	}
