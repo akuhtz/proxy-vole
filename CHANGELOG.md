@@ -1,6 +1,10 @@
 # Change Log
 This file contains the change log.
 
+## 1.1.3-SNAPSHOT
+* Fixed issue #41: Replaced ini4j with commons-configuration2. Thanks to davejbur!
+* Update dependencies
+
 ## 1.1.2
 * Fixed issue #43: Use secure proxy also for websocket protocol. Thanks to poeschik!
 * Update dependencies
