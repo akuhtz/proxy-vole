@@ -3,19 +3,19 @@ package com.github.markusbernhardt.proxy.search.browser.firefox;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import org.apache.commons.configuration2.*;
+import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.SubnodeConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
-import java.io.*;
 
 /*****************************************************************************
  * Parser for the Firefox settings file. Will extract all relevant proxy settings form the configuration file.
@@ -99,7 +99,8 @@ class FirefoxSettingParser {
         // Read profiles.ini
         File profilesIniFile = source.getProfilesIni();
         if (profilesIniFile.exists()) {
-            INIConfiguration profilesIni = new INIConfiguration();
+            final INIConfiguration profilesIni = new INIConfiguration();
+            
             try (FileReader fileReader = new FileReader(profilesIniFile)) {
                 profilesIni.read(fileReader);
 
@@ -114,9 +115,9 @@ class FirefoxSettingParser {
                         SubnodeConfiguration section = profilesIni.getSection(keyFF67);
 
                         Object propLocked = section.getProperty("Locked");
-                        if ((propLocked!=null)&&("1".equals(propLocked.toString()))) {
+                        if (propLocked != null && "1".equals(propLocked.toString())) {
                             Object propDefault = section.getProperty("Default");
-                            if (propDefault!=null) {
+                            if (propDefault != null) {
                               File profileFolder =
                                   new File(profilesIniFile.getParentFile().getAbsolutePath(), propDefault.toString());
                               Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder is {}", profileFolder);
@@ -127,22 +128,22 @@ class FirefoxSettingParser {
                         }
                     }
                 }
-                else {  //FIXME - does this mean we have no sections in pre FF67 ini files? or just no sections starting "Install"?
+                else {  // no sections starting "Install" found, older version than FF67+ detected
                     for (String section : profilesIni.getSections()) {
                         SubnodeConfiguration confSection = profilesIni.getSection(section);
                         
-                        if (confSection!=null) {
+                        if (confSection != null) {
                             Logger
                                 .log(getClass(), LogLevel.TRACE, "Current entry, key: {}, value: {}", section,
                                     confSection.toString());
 
                             Object propName = confSection.getProperty("Name");
                             Object propRelative = confSection.getProperty("IsRelative");
-                            if ((propName!=null)&&(propRelative!=null)) {
+                            if (propName != null && propRelative != null) {
                                 if ("default".equals(propName.toString())
                                     && "1".equals(propRelative.toString())) {
                                     Object propPath = confSection.getProperty("Path");
-                                    if (propPath!=null) {
+                                    if (propPath != null) {
                                         File profileFolder =
                                             new File(profilesIniFile.getParentFile().getAbsolutePath(), propPath.toString());
                                         Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder is {}", profileFolder);
