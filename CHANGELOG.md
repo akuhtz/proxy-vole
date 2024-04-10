@@ -1,7 +1,7 @@
 # Change Log
 This file contains the change log.
 
-## 1.1.3-SNAPSHOT
+## 1.1.3
 * Fixed issue #41: Replaced ini4j with commons-configuration2. Thanks to davejbur!
 * Update dependencies
 
