@@ -14,7 +14,9 @@ import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.ProxyUtil;
 
 /*****************************************************************************
- * ProxySelector that will use a PAC script to find an proxy for a given URI.
+ * ProxySelector that will use a PAC script to find a proxy for a given URI.
+ *
+ * @see SafePacProxySelector
  *
  * @author Markus Bernhardt, Copyright 2016
  * @author Bernd Rosstauscher, Copyright 2009

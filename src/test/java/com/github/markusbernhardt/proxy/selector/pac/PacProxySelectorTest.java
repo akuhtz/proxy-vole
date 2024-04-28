@@ -29,15 +29,11 @@ public class PacProxySelectorTest {
 
 	/*************************************************************************
 	 * Test method
-	 * 
-	 * @throws ProxyException
-	 *             on proxy detection error.
-	 * @throws MalformedURLException
-	 *             on URL erros
-	 ************************************************************************/
+	 *
+     ************************************************************************/
 	@Test
-	public void testScriptExecution() throws ProxyException, MalformedURLException {
-		List<Proxy> result = new PacProxySelector(new UrlPacScriptSource(toUrl("test1.pac")))
+	public void testScriptExecution() {
+		List<Proxy> result = new PacProxySelector(getTestPacScriptSource("test1.pac"))
 		        .select(TestUtil.HTTP_TEST_URI);
 
 		assertEquals(TestUtil.HTTP_TEST_PROXY, result.get(0));
@@ -45,15 +41,11 @@ public class PacProxySelectorTest {
 
 	/*************************************************************************
 	 * Test method
-	 * 
-	 * @throws ProxyException
-	 *             on proxy detection error.
-	 * @throws MalformedURLException
-	 *             on URL erros
-	 ************************************************************************/
+	 *
+     ************************************************************************/
 	@Test
-	public void testScriptExecution2() throws ProxyException, MalformedURLException {
-		PacProxySelector pacProxySelector = new PacProxySelector(new UrlPacScriptSource(toUrl("test2.pac")));
+	public void testScriptExecution2() {
+		PacProxySelector pacProxySelector = new PacProxySelector(getTestPacScriptSource("test2.pac"));
 		List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
 		assertEquals(Proxy.NO_PROXY, result.get(0));
 
@@ -63,14 +55,10 @@ public class PacProxySelectorTest {
 
 	/*************************************************************************
 	 * Test download fix to prevent infinite loop.
-	 * 
-	 * @throws ProxyException
-	 *             on proxy detection error.
-	 * @throws MalformedURLException
-	 *             on URL errors
-	 ************************************************************************/
+	 *
+     ************************************************************************/
 	@Test
-	public void pacDownloadFromURLShouldNotUseProxy() throws ProxyException, MalformedURLException {
+	public void pacDownloadFromURLShouldNotUseProxy() {
 		ProxySelector oldOne = ProxySelector.getDefault();
 		try {
 			ProxySelector.setDefault(new ProxySelector() {
@@ -95,15 +83,11 @@ public class PacProxySelectorTest {
 
 	/*************************************************************************
 	 * Test method
-	 * 
-	 * @throws ProxyException
-	 *             on proxy detection error.
-	 * @throws MalformedURLException
-	 *             on URL erros
-	 ************************************************************************/
+	 *
+     ************************************************************************/
 	@Test
-	public void testScriptMuliProxy() throws ProxyException, MalformedURLException {
-		PacProxySelector pacProxySelector = new PacProxySelector(new UrlPacScriptSource(toUrl("testMultiProxy.pac")));
+	public void testScriptMuliProxy() {
+		PacProxySelector pacProxySelector = new PacProxySelector(getTestPacScriptSource("testMultiProxy.pac"));
 		List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
 		assertEquals(4, result.size());
         assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy.com", 80)), result.get(0));
@@ -115,14 +99,10 @@ public class PacProxySelectorTest {
 	/*************************************************************************
 	 * Test method
 	 *
-	 * @throws ProxyException
-	 *             on proxy detection error.
-	 * @throws MalformedURLException
-	 *             on URL erros
-	 ************************************************************************/
+     ************************************************************************/
 	@Test
-	public void testScriptProxyTypes() throws ProxyException, MalformedURLException {
-		PacProxySelector pacProxySelector = new PacProxySelector(new UrlPacScriptSource(toUrl("testProxyTypes.pac")));
+	public void testScriptProxyTypes() {
+		PacProxySelector pacProxySelector = new PacProxySelector(getTestPacScriptSource("testProxyTypes.pac"));
 		List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
 		assertEquals(6, result.size());
 		assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy.com", 80)), result.get(0));
@@ -135,17 +115,13 @@ public class PacProxySelectorTest {
 
 	/*************************************************************************
 	 * Test method for the override local IP feature.
-	 * 
-	 * @throws ProxyException
-	 *             on proxy detection error.
-	 * @throws MalformedURLException
-	 *             on URL erros
-	 ************************************************************************/
+	 *
+     ************************************************************************/
 	@Test
-	public void testLocalIPOverride() throws ProxyException, MalformedURLException {
+	public void testLocalIPOverride() {
 		System.setProperty(PacScriptMethods.OVERRIDE_LOCAL_IP, "123.123.123.123");
 		try {
-			PacProxySelector pacProxySelector = new PacProxySelector(new UrlPacScriptSource(toUrl("testLocalIP.pac")));
+			PacProxySelector pacProxySelector = new PacProxySelector(getTestPacScriptSource("testLocalIP.pac"));
 			List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
 			assertEquals(result.get(0),
 			        new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("123.123.123.123", 8080)));
@@ -161,11 +137,16 @@ public class PacProxySelectorTest {
 	 * @param testFile
 	 *            the name of the test file.
 	 * @return the URL.
-	 * @throws MalformedURLException
-	 ************************************************************************/
-
-	private String toUrl(String testFile) throws MalformedURLException {
+     ************************************************************************/
+	private static String toUrl(String testFile) throws MalformedURLException {
 		return new File(TestUtil.TEST_DATA_FOLDER + "pac", testFile).toURI().toURL().toString();
 	}
 
+	static UrlPacScriptSource getTestPacScriptSource(String testFile) {
+        try {
+            return new UrlPacScriptSource(toUrl(testFile));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e); // not expected to be thrown
+        }
+    }
 }
