@@ -10,6 +10,7 @@ import java.util.List;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacScriptSource;
+import com.github.markusbernhardt.proxy.selector.pac.SafePacProxySelector;
 import com.github.markusbernhardt.proxy.selector.pac.UrlPacScriptSource;
 
 /*****************************************************************************
@@ -20,6 +21,7 @@ import com.github.markusbernhardt.proxy.selector.pac.UrlPacScriptSource;
  ****************************************************************************/
 
 public class ProxyUtil {
+	public static final String PAC_URL_SANITIZATION_PROP = "com.github.markusbernhardt.proxy.pacUrlSanitization";
 
 	public static final int DEFAULT_PROXY_PORT = 80;
 
@@ -84,10 +86,26 @@ public class ProxyUtil {
 	 ************************************************************************/
 
 	public static PacProxySelector buildPacSelectorForUrl(String url) {
+		return buildPacSelectorForUrl(url, isPacUrlSanitizationEnabled());
+	}
+
+	/**
+	 * Build a PAC proxy selector for the given URL.
+	 *
+	 * @param url to fetch the PAC script from.
+	 * @param useUrlSanitization whether to use URL sanitization prior to evaluating the PAC script on the provided URL.
+	 *                              See {@link SafePacProxySelector} for details.
+	 * @return a PacProxySelector or null if it is not possible to build a working selector.
+	 */
+	public static PacProxySelector buildPacSelectorForUrl(String url, boolean useUrlSanitization) {
 		PacProxySelector result = null;
 		PacScriptSource pacSource = new UrlPacScriptSource(url);
 		if (pacSource.isScriptValid()) {
-			result = new PacProxySelector(pacSource);
+			if (useUrlSanitization) {
+				result = new SafePacProxySelector(pacSource);
+			} else {
+				result = new PacProxySelector(pacSource);
+			}
 		}
 		return result;
 	}
@@ -116,4 +134,7 @@ public class ProxyUtil {
 		return hostOrIP;
 	}
 
+	public static boolean isPacUrlSanitizationEnabled() {
+		return Boolean.parseBoolean(System.getProperty(PAC_URL_SANITIZATION_PROP, "true"));
+	}
 }
