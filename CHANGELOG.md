@@ -1,6 +1,10 @@
 # Change Log
 This file contains the change log.
 
+## 1.1.5
+* Fixed issue #109: PListParser#base64decode does not expect data to be multiline. Thanks to vsalavatov!
+* Update dependencies
+
 ## 1.1.4
 * Fixed issue #93: Make PAC evaluation compatible with browsers. Thanks to vsalavatov!
   To restore the old unsafe behaviour, set the system property ```com.github.markusbernhardt.proxy.pacUrlSanitization``` to ```false```.
