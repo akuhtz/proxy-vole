@@ -527,6 +527,8 @@ public final class PListParser {
 	 */
 	static byte[] base64decode(String base64) {
 		base64 = base64.trim();
+		base64 = base64.replaceAll("\\s", "");
+		
 		int endTrim = base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0;
 		int length = (base64.length() / 4) * 3 - endTrim;
 		base64 = base64.replace('=', 'A');
