@@ -107,8 +107,9 @@ public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 			        WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A);
                         pacUrl = WinHttpHelpers.detectAutoProxyConfigUrl(dwAutoDetectFlags);
 		}
-		if (pacUrl == null) {
+		if (pacUrl == null || pacUrl.trim().length() == 0) {
 			pacUrl = ieProxyConfig.getAutoConfigUrl();
+            Logger.log(getClass(), LogLevel.TRACE, "Autodetecting script URL did not return valid pacUrl. Use autoConfigUrl from IE proxy config: " + pacUrl);
 		}
 		if (pacUrl != null && pacUrl.trim().length() > 0) {
 			Logger.log(getClass(), LogLevel.TRACE, "IE uses script: " + pacUrl);
@@ -120,6 +121,9 @@ public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 				pacUrl = "file:///" + pacUrl.substring(7);
 			}
 			return ProxyUtil.buildPacSelectorForUrl(pacUrl);
+		}
+		else {
+            Logger.log(getClass(), LogLevel.TRACE, "The pacUrl for IE is not available: " + pacUrl);
 		}
 
 		return null;
