@@ -1,6 +1,10 @@
 # Change Log
 This file contains the change log.
 
+## 1.1.6
+* Fixed issue #147: Unexpected proxy auto-detection result on Windows.
+* Update dependencies
+
 ## 1.1.5
 * Fixed issue #109: PListParser#base64decode does not expect data to be multiline. Thanks to vsalavatov!
 * Update dependencies
