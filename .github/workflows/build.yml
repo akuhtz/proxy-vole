@@ -1,6 +1,8 @@
 name: Java CI
 
-on: [push, pull_request]
+on: 
+  - push
+  - pull_request
 
 jobs:
   build:
@@ -28,3 +30,27 @@ jobs:
         run: mvn --version
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
+  deploy:
+    if: contains( github.ref, 'master')
+    needs: build
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: sonatype
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 8
+          server-id: ossrh
+          server-username: OSSRH_USERNAME # env variable for username in deploy
+          server-password: OSSRH_PASSWORD # env variable for token in deploy
+          gpg-private-key: "${{ secrets.GPG_SIGNING_KEY }}"
+          overwrite-settings: false
+      - name: Deploy snapshot artifacts
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: mvn --batch-mode deploy --settings .github/workflows/settings.xml -Dpgp.keyname=${{ secrets.GPG_KEY_NAME }} -DskipTests=true -Prelease-sign-artifacts

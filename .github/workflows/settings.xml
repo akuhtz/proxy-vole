@@ -1,0 +1,24 @@
+<settings>
+  <servers>
+    <!-- Sonatype Nexus -->
+    <server>
+      <id>sonatype-nexus-snapshots</id>
+      <username>${env.OSSRH_USERNAME}</username>
+      <password>${env.OSSRH_PASSWORD}</password>
+    </server>
+    <server>
+      <id>sonatype-nexus-staging</id>
+      <username>${env.OSSRH_USERNAME}</username>
+      <password>${env.OSSRH_PASSWORD}</password>
+    </server>	
+    <server>
+      <id>ossrh</id>
+      <username>${env.OSSRH_USERNAME}</username>
+      <password>${env.OSSRH_PASSWORD}</password>
+    </server>
+    <server>
+      <id>gpg.passphrase</id>
+      <passphrase>${env.GPG_PASSPHRASE}</passphrase>
+    </server>
+  </servers>
+</settings>
