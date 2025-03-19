@@ -156,13 +156,15 @@ public class PacProxySelector extends ProxySelector {
      * @return a Proxy
      ************************************************************************/
 
-    private Proxy buildProxyFromPacResult(String pacResult) {
+    protected Proxy buildProxyFromPacResult(String pacResult) {
         String[] words = pacResult.trim().split("\\s+");
 
-        if (words.length == 0)
+        if (words.length == 0) {
             return Proxy.NO_PROXY;
-        if (words.length == 1)
+        }
+        if (words.length == 1) {
             return Proxy.NO_PROXY;
+        }
 
         String proxyType = words[0];
         String host = concat(words, 1);
@@ -176,7 +178,7 @@ public class PacProxySelector extends ProxySelector {
         Integer port = ProxyUtil.DEFAULT_PROXY_PORT;
 
         // Split port from host
-        int indexOfPort = host.indexOf(':');
+        int indexOfPort = host.lastIndexOf(':');
         int index2 = host.lastIndexOf(']');
         if (indexOfPort != -1 && index2 < indexOfPort) {
             port = Integer.parseInt(host.substring(indexOfPort + 1).trim());
