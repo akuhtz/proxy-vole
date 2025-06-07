@@ -57,14 +57,14 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>central-portal-snapshots</id>
+            <name>Central Portal Snapshots Repository</name>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Nexus Staging Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>central-portal-staging</id>
+            <name>Central Portal Staging Repository</name>
+            <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
@@ -326,11 +326,11 @@
             <version>3.5.3</version>
         </plugin>
         
-        <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.7.0</version>
-        </plugin>
+		<plugin>
+			<groupId>org.sonatype.central</groupId>
+			<artifactId>central-publishing-maven-plugin</artifactId>
+			<version>0.7.0</version>
+		</plugin>                
         <plugin>
             <groupId>org.apache.felix</groupId>
             <artifactId>maven-bundle-plugin</artifactId>
@@ -463,15 +463,18 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <!-- autoReleaseAfterClose>true</autoReleaseAfterClose -->
+                            <publishingServerId>central</publishingServerId>
+                            <!--
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
+                            -->
+                            <waitUntil>validated</waitUntil>
                         </configuration>
-                    </plugin>
+                    </plugin>                
                 </plugins>
             </build>
         </profile>

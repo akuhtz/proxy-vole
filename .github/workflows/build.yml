@@ -45,14 +45,14 @@ jobs:
           distribution: temurin
           java-version: 8
           cache: 'maven'
-          server-id: ossrh
-          server-username: OSSRH_USERNAME # env variable for username in deploy
-          server-password: OSSRH_PASSWORD # env variable for token in deploy
+          server-id: central
+          server-username: CENTRAL_USERNAME # env variable for username in deploy
+          server-password: CENTRAL_PASSWORD # env variable for token in deploy
           gpg-private-key: "${{ secrets.GPG_SIGNING_KEY }}"
           overwrite-settings: false
       - name: Deploy snapshot artifacts
         env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: mvn --batch-mode deploy --settings .github/workflows/settings.xml -Dpgp.keyname=${{ secrets.GPG_KEY_NAME }} -DskipTests=true -Prelease-sign-artifacts
