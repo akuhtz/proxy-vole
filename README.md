@@ -24,12 +24,12 @@ Add the dependency to your pom.xml
 <dependency>
   <groupId>org.bidib.com.github.markusbernhardt</groupId>
   <artifactId>proxy-vole</artifactId>
-  <version>1.1.6</version>
+  <version>1.1.7</version>
 </dependency>
 ```
 or to you gradle.build:
 ```
-compile 'org.bidib.com.github.markusbernhardt:proxy-vole:1.1.6'
+compile 'org.bidib.com.github.markusbernhardt:proxy-vole:1.1.7'
 ```
 
 ### Using the default strategy to find the settings
@@ -139,7 +139,7 @@ System.setProperty(PacScriptMethods.OVERRIDE_LOCAL_IP, "123.123.123.123");
 ```
 
 ### Proxy Vole Tester
-There is also a small GUI to test the different search strategies. Simply start the [jar-with-dependencies](http://search.maven.org/remotecontent?filepath=org/bidib/com/github/markusbernhardt/proxy-vole/1.1.6/proxy-vole-1.1.6-jar-with-dependencies.jar) 
+There is also a small GUI to test the different search strategies. Simply start the [jar-with-dependencies](http://search.maven.org/remotecontent?filepath=org/bidib/com/github/markusbernhardt/proxy-vole/1.1.7/proxy-vole-1.1.7-jar-with-dependencies.jar) 
 or directly the class `com.github.markusbernhardt.proxy.ui.ProxyTester`.
 
 ![Screenshot](https://raw.githubusercontent.com/akuhtz/proxy-vole/master/src/site/screenshots/proxy-vole-tester.png "Proxy Vole Tester")

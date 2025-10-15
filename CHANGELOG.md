@@ -1,6 +1,10 @@
 # Change Log
 This file contains the change log.
 
+## 1.1.7
+* Fixed issue #169: IPv6 PAC results not parsed correctly
+* Update dependencies
+
 ## 1.1.6
 * Fixed issue #147: Unexpected proxy auto-detection result on Windows.
 * Update dependencies
