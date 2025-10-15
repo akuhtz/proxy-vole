@@ -30,7 +30,7 @@
 	<system-stubs-jupiter.version>2.0.3</system-stubs-jupiter.version>
 	<slf4j.version>2.0.17</slf4j.version>
     <logback.version>1.3.14</logback.version>
-    <delight-rhino-sandbox.version>0.0.18</delight-rhino-sandbox.version>
+    <delight-rhino-sandbox.version>0.2.0</delight-rhino-sandbox.version>
     <rhino-engine.version>1.7.15</rhino-engine.version>
   </properties>
 
