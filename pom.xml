@@ -18,7 +18,7 @@
 	<enforcer-no-snapshots.skip>false</enforcer-no-snapshots.skip>
     <maven.compiler.release>${java.version}</maven.compiler.release>
 	
-	<commons-configuration2.version>2.13.0</commons-configuration2.version>
+	<commons-configuration2.version>2.14.0</commons-configuration2.version>
 	<commons-lang3.version>3.20.0</commons-lang3.version>
 	<jna.version>5.18.1</jna.version>
 	<junit-jupiter.version>6.0.3</junit-jupiter.version>
