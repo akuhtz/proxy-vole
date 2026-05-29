@@ -1,6 +1,14 @@
 # Change Log
 This file contains the change log.
 
+## 2.0.1
+* Fixed issue #245: Log HTTP 400 on INFO level
+* Update dependencies
+
+## 2.0.0
+* Require Java 17
+* Update dependencies
+
 ## 1.1.7
 * Fixed issue #169: IPv6 PAC results not parsed correctly
 * Update dependencies
