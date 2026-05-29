@@ -10,11 +10,11 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 /*****************************************************************************
  * Script source that will load the content of a PAC file from an webserver. The
@@ -67,6 +67,13 @@ public class UrlPacScriptSource implements PacScriptSource {
 				} else {
 					this.scriptContent = downloadPacContent(this.scriptUrl);
 				}
+			} catch (BadRequestException e) {
+                // FritzBox returns 400 Bad Request 
+                Logger
+                    .log(getClass(), LogLevel.INFO, "Loading script failed from: {} with error {}", this.scriptUrl,
+                        e.getMessage());
+                this.scriptContent = "";
+                throw new IOException(e.getMessage());
 			} catch (IOException e) {
 				Logger.log(getClass(), LogLevel.WARNING, "Loading script failed from: {} with error {}", this.scriptUrl,
 				        e.getMessage());
@@ -118,9 +125,10 @@ public class UrlPacScriptSource implements PacScriptSource {
 	 * @return the script content.
 	 * @throws IOException
 	 *             on read error.
+	 * @throws BadRequestException thrown by HTTP 400 response
 	 ************************************************************************/
 
-	private String downloadPacContent(String url) throws IOException {
+	private String downloadPacContent(String url) throws IOException, BadRequestException {
 		if (url == null) {
 			throw new IOException("Invalid PAC script URL: null");
 		}
@@ -131,6 +139,11 @@ public class UrlPacScriptSource implements PacScriptSource {
 		try {
 			con = setupHTTPConnection(url);
 			if (con.getResponseCode() != 200) {
+			    
+			    if(con.getResponseCode() == 400) {
+			        throw new BadRequestException("Server returned: " + con.getResponseCode() + " " + con.getResponseMessage());
+			    }
+			    
 				throw new IOException("Server returned: " + con.getResponseCode() + " " + con.getResponseMessage());
 			}
 			// Read expire date.
