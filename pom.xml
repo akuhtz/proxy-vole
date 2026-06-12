@@ -20,7 +20,7 @@
 	
 	<commons-configuration2.version>2.15.1</commons-configuration2.version>
 	<commons-lang3.version>3.20.0</commons-lang3.version>
-	<jna.version>5.19.0</jna.version>
+	<jna.version>5.19.1</jna.version>
 	<junit-jupiter.version>6.1.0</junit-jupiter.version>
 	<assertj.version>3.27.7</assertj.version>
 	<system-stubs-jupiter.version>2.1.8</system-stubs-jupiter.version>
