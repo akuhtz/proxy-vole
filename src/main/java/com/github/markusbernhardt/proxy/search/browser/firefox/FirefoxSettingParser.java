@@ -7,12 +7,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import org.apache.commons.configuration2.INIConfiguration;
-import org.apache.commons.configuration2.SubnodeConfiguration;
-import org.apache.commons.configuration2.ex.ConfigurationException;
+import com.sshtools.jini.INI;
+import com.sshtools.jini.INI.Section;
+import com.sshtools.jini.INIReader;
+import com.sshtools.jini.INIParseException;
 
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
@@ -44,7 +46,7 @@ class FirefoxSettingParser {
      *             on read error.
      ************************************************************************/
 
-    public Properties parseSettings(FirefoxProfileSource source) throws IOException, ConfigurationException {
+    public Properties parseSettings(FirefoxProfileSource source) throws IOException {
         File settingsFile = getSettingsFile(source);
 
         Properties result = new Properties();
@@ -95,31 +97,30 @@ class FirefoxSettingParser {
      * @throws IOException
      *             on read error.
      */
-    protected File getSettingsFile(FirefoxProfileSource source) throws IOException, ConfigurationException {
+    protected File getSettingsFile(FirefoxProfileSource source) throws IOException {
         // Read profiles.ini
         File profilesIniFile = source.getProfilesIni();
         if (profilesIniFile.exists()) {
-            final INIConfiguration profilesIni = new INIConfiguration();
-            
+
             try (FileReader fileReader = new FileReader(profilesIniFile)) {
-                profilesIni.read(fileReader);
+                final INI profilesIni = new INIReader.Builder().build().read(fileReader);
 
                 final List<String> keysFF67 =
-                    profilesIni.getSections().stream().filter(s -> s.startsWith("Install")).collect(Collectors.toList());
+                    profilesIni.sections().keySet().stream().filter(s -> s.startsWith("Install")).collect(Collectors.toList());
                 if (!keysFF67.isEmpty()) {
                     Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings for FF67+ detected.");
 
                     for (String keyFF67 : keysFF67) {
 
                         Logger.log(getClass(), LogLevel.DEBUG, "Current FF67+ section key is: {}", keysFF67);
-                        SubnodeConfiguration section = profilesIni.getSection(keyFF67);
+                        Section section = profilesIni.section(keyFF67);
 
-                        Object propLocked = section.getProperty("Locked");
-                        if (propLocked != null && "1".equals(propLocked.toString())) {
-                            Object propDefault = section.getProperty("Default");
+                        String propLocked = section.getOr("Locked").orElse(null);
+                        if (propLocked != null && "1".equals(propLocked)) {
+                            String propDefault = section.getOr("Default").orElse(null);
                             if (propDefault != null) {
                               File profileFolder =
-                                  new File(profilesIniFile.getParentFile().getAbsolutePath(), propDefault.toString());
+                                  new File(profilesIniFile.getParentFile().getAbsolutePath(), propDefault);
                               Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder is {}", profileFolder);
 
                               File settingsFile = new File(profileFolder, "prefs.js");
@@ -129,33 +130,34 @@ class FirefoxSettingParser {
                     }
                 }
                 else {  // no sections starting "Install" found, older version than FF67+ detected
-                    for (String section : profilesIni.getSections()) {
-                        SubnodeConfiguration confSection = profilesIni.getSection(section);
-                        
-                        if (confSection != null) {
-                            Logger
-                                .log(getClass(), LogLevel.TRACE, "Current entry, key: {}, value: {}", section,
-                                    confSection.toString());
+                    for (Map.Entry<String, Section[]> entry : profilesIni.sections().entrySet()) {
+                        String section = entry.getKey();
+                        Section confSection = entry.getValue()[0];
 
-                            Object propName = confSection.getProperty("Name");
-                            Object propRelative = confSection.getProperty("IsRelative");
-                            if (propName != null && propRelative != null) {
-                                if ("default".equals(propName.toString())
-                                    && "1".equals(propRelative.toString())) {
-                                    Object propPath = confSection.getProperty("Path");
-                                    if (propPath != null) {
-                                        File profileFolder =
-                                            new File(profilesIniFile.getParentFile().getAbsolutePath(), propPath.toString());
-                                        Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder is {}", profileFolder);
+                        Logger
+                            .log(getClass(), LogLevel.TRACE, "Current entry, key: {}, value: {}", section,
+                                confSection.asString());
 
-                                        File settingsFile = new File(profileFolder, "prefs.js");
-                                        return settingsFile;
-                                    }
+                        String propName = confSection.getOr("Name").orElse(null);
+                        String propRelative = confSection.getOr("IsRelative").orElse(null);
+                        if (propName != null && propRelative != null) {
+                            if ("default".equals(propName)
+                                && "1".equals(propRelative)) {
+                                String propPath = confSection.getOr("Path").orElse(null);
+                                if (propPath != null) {
+                                    File profileFolder =
+                                        new File(profilesIniFile.getParentFile().getAbsolutePath(), propPath);
+                                    Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder is {}", profileFolder);
+
+                                    File settingsFile = new File(profileFolder, "prefs.js");
+                                    return settingsFile;
                                 }
                             }
                         }
                     }
                 }
+            } catch (INIParseException e) {
+                throw new IOException("Error parsing the Firefox profiles.ini file", e);
             }
         }
         Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder not found!");
