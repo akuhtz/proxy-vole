@@ -1,6 +1,10 @@
 # Change Log
 This file contains the change log.
 
+## 2.0.2
+* Fixed issue #273: Replace commons-configuration2 with jini-lib for Firefox profiles.ini parsing
+* Update dependencies
+
 ## 2.0.1
 * Fixed issue #245: Log HTTP 400 on INFO level
 * Update dependencies

@@ -24,12 +24,12 @@ Add the dependency to your pom.xml
 <dependency>
   <groupId>org.bidib.com.github.markusbernhardt</groupId>
   <artifactId>proxy-vole</artifactId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
 </dependency>
 ```
 or to you gradle.build:
 ```
-compile 'org.bidib.com.github.markusbernhardt:proxy-vole:2.0.1'
+compile 'org.bidib.com.github.markusbernhardt:proxy-vole:2.0.2'
 ```
 
 ### Using the default strategy to find the settings
