@@ -18,7 +18,7 @@
 	<enforcer-no-snapshots.skip>false</enforcer-no-snapshots.skip>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     
-    <jvm9ArgsTests>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.math=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.util.stream=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.base/java.util.regex=ALL-UNNAMED --add-opens java.base/java.nio.channels.spi=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED --add-opens java.base/sun.nio.fs=ALL-UNNAMED --add-opens java.base/sun.nio.cs=ALL-UNNAMED --add-opens java.base/java.nio.file=ALL-UNNAMED --add-opens java.base/java.nio.charset=ALL-UNNAMED</jvm9ArgsTests>
+    <jvm9ArgsTests>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED</jvm9ArgsTests>
 	<jvm.args.tests>${jvm9ArgsTests} -Xms32m -Xmx144m -XX:SoftRefLRUPolicyMSPerMB=50 -Djava.awt.headless=true -Djdk.net.URLClassPath.disableClassPathURLCheck=true</jvm.args.tests>
     
 	<jini.version>0.6.14</jini.version>
@@ -376,6 +376,7 @@
                             <argLine>${jvm.args.tests}</argLine>
                             <useFile>false</useFile>
                             <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                            <useSystemClassLoader>false</useSystemClassLoader>
 						</configuration>
 					</plugin>
                 </plugins>
