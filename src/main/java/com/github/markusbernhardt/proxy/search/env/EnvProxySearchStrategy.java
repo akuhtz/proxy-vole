@@ -70,6 +70,20 @@ public class EnvProxySearchStrategy implements ProxySearchStrategy {
 	}
 
 	/*************************************************************************
+	 * Creates an EnvProxySearchStrategy with pre-resolved proxy values.
+	 * Used for testing without requiring environment variables.
+	 ************************************************************************/
+
+	public static EnvProxySearchStrategy ofValues(String httpProxy, String httpsProxy, String ftpProxy, String noProxy) {
+		EnvProxySearchStrategy strategy = new EnvProxySearchStrategy();
+		strategy.httpProxy = httpProxy;
+		strategy.httpsProxy = httpsProxy;
+		strategy.ftpProxy = ftpProxy;
+		strategy.noProxy = noProxy;
+		return strategy;
+	}
+
+	/*************************************************************************
 	 * Loads the proxy settings from the system environment variables.
 	 ************************************************************************/
 
