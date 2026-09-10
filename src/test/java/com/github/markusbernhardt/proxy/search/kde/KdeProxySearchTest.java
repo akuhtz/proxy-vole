@@ -11,16 +11,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.github.markusbernhardt.proxy.TestUtil;
 import com.github.markusbernhardt.proxy.search.desktop.kde.KdeProxySearchStrategy;
+import com.github.markusbernhardt.proxy.search.env.EnvProxySearchStrategy;
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.ProxyException;
-
-import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
-import uk.org.webcompere.systemstubs.jupiter.SystemStub;
-import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 /*****************************************************************************
  * Unit tests for the KDE settings search strategy. For every test the "user.home" system property is switched to the
@@ -38,21 +34,10 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
  ****************************************************************************/
 
 @TestInstance(Lifecycle.PER_CLASS)
-@ExtendWith(SystemStubsExtension.class)
 public class KdeProxySearchTest {
-
-    /*************************************************************************
-     * Needed to set environment variables
-     ************************************************************************/
-    @SystemStub
-    public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
     @BeforeAll
     public void setupClass() {
-        environmentVariables.set("HTTP_PROXY", "http://http_proxy.unit-test.invalid:8090");
-        environmentVariables.set("HTTPS_PROXY", "http://https_proxy.unit-test.invalid:8091");
-        environmentVariables.set("FTP_PROXY", "http://ftp_proxy.unit-test.invalid:8092");
-
         Logger.setBackend(new Logger.Slf4jLogBackEnd());
     }
 
@@ -153,9 +138,8 @@ public class KdeProxySearchTest {
      ************************************************************************/
     @Test
     public void testEnvHttp() throws ProxyException, URISyntaxException {
-        TestUtil.setTestDataFolder("kde_env");
-
-        ProxySelector ps = new KdeProxySearchStrategy().getProxySelector();
+        ProxySelector ps = EnvProxySearchStrategy.ofValues(
+                "http://http_proxy.unit-test.invalid:8090", null, null, null).getProxySelector();
 
         List<Proxy> result = ps.select(TestUtil.HTTP_TEST_URI);
         assertEquals(TestUtil.HTTP_TEST_PROXY, result.get(0));
@@ -171,9 +155,9 @@ public class KdeProxySearchTest {
      ************************************************************************/
     @Test
     public void testEnvHttps() throws ProxyException, URISyntaxException {
-        TestUtil.setTestDataFolder("kde_env");
-
-        ProxySelector ps = new KdeProxySearchStrategy().getProxySelector();
+        ProxySelector ps = EnvProxySearchStrategy.ofValues(
+                "http://http_proxy.unit-test.invalid:8090",
+                "http://https_proxy.unit-test.invalid:8091", null, null).getProxySelector();
 
         List<Proxy> result = ps.select(TestUtil.HTTPS_TEST_URI);
         assertEquals(TestUtil.HTTPS_TEST_PROXY, result.get(0));
@@ -189,9 +173,9 @@ public class KdeProxySearchTest {
      ************************************************************************/
     @Test
     public void testEnvFtp() throws ProxyException, URISyntaxException {
-        TestUtil.setTestDataFolder("kde_env");
-
-        ProxySelector ps = new KdeProxySearchStrategy().getProxySelector();
+        ProxySelector ps = EnvProxySearchStrategy.ofValues(
+                "http://http_proxy.unit-test.invalid:8090", null,
+                "http://ftp_proxy.unit-test.invalid:8092", null).getProxySelector();
 
         List<Proxy> result = ps.select(TestUtil.FTP_TEST_URI);
         assertEquals(TestUtil.FTP_TEST_PROXY, result.get(0));
