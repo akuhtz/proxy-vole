@@ -181,7 +181,6 @@
           <instructions>
             <!-- no 'uses' osgi directive -->
             <_nouses>true</_nouses>
-            <_snapshot>${osgi-version-qualifier}</_snapshot>
           </instructions>
         </configuration>
         <executions>
@@ -233,7 +232,6 @@
         <!-- add this to disable checking -->
 	    <configuration>
 	      <doclint>none</doclint>
-	      <source>8</source>
 	    </configuration>
       </plugin>
       <plugin>
@@ -431,7 +429,6 @@
                                 <!-- add this to disable checking -->
                                 <configuration>
                                     <doclint>none</doclint>
-                                    <source>8</source>
                                 </configuration>
                             </execution>
                         </executions>

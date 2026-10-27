@@ -2,6 +2,7 @@ package com.github.markusbernhardt.proxy.util;
 
 import java.net.MalformedURLException;
 import java.net.Proxy;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +47,7 @@ public class ProxyUtil {
 				proxyVar = "http://" + proxyVar;
 			}
 
-			URL url = new URL(proxyVar);
+			URL url = URI.create(proxyVar).toURL();
 			String host = cleanIPv6(url.getHost());
 
 			int port = url.getPort();
@@ -54,7 +55,7 @@ public class ProxyUtil {
 				port = DEFAULT_PROXY_PORT;
 			}
 			return new FixedProxySelector(host.trim(), port);
-		} catch (MalformedURLException e) {
+		} catch (MalformedURLException | IllegalArgumentException e) {
 			Logger.log(ProxyUtil.class, Logger.LogLevel.WARNING, "Cannot parse Proxy Settings {}", proxyVar);
 			return null;
 		}

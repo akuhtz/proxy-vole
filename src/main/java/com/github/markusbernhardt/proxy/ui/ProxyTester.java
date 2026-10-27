@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.Proxy;
 import java.net.ProxySelector;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
@@ -132,7 +133,7 @@ public class ProxyTester extends JFrame {
             }
             ProxySelector.setDefault(psel);
 
-            URL url = new URL(this.urlField.getText().trim());
+            URL url = URI.create(this.urlField.getText().trim()).toURL();
             List<Proxy> result = psel.select(url.toURI());
             if (result == null || result.size() == 0) {
                 ProxyTester.this.logArea.append("INFO\tNo proxy found for this url.\n");

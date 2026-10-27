@@ -11,7 +11,7 @@ import delight.rhinosandox.RhinoSandbox;
 import delight.rhinosandox.RhinoSandboxes;
 
 /*****************************************************************************
- * PAC parser using the Rhino JavaScript engine bundled with Java 1.6<br>
+ * PAC parser using the Rhino JavaScript engine (org.mozilla:rhino)<br>
  * 
  * More information about PAC can be found there:<br>
  * <a href="http://en.wikipedia.org/wiki/Proxy_auto-config">Proxy_auto-config </a><br>
@@ -135,7 +135,7 @@ public class JavaxPacScriptParser implements PacScriptParser {
      *             on execution error.
      ************************************************************************/
     @Override
-    public String evaluate(String url, String host) throws ProxyEvaluationException {
+    public synchronized String evaluate(String url, String host) throws ProxyEvaluationException {
         try {
             StringBuilder script = new StringBuilder(this.source.getScriptContent());
             String evalMethod = " ;FindProxyForURL (\"" + url + "\",\"" + host + "\")";

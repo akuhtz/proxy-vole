@@ -291,28 +291,30 @@ public class GnomeDConfProxySearchStrategy implements ProxySearchStrategy {
 	private Properties parseSettings(Properties settings) throws IOException {
 		String line;
 		Logger.log(getClass(), LogLevel.TRACE, "exec gsettings list-recursively org.gnome.system.proxy");
-		Process p = Runtime.getRuntime().exec("gsettings list-recursively org.gnome.system.proxy");
-		BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		Process p = new ProcessBuilder("gsettings", "list-recursively", "org.gnome.system.proxy")
+				.redirectErrorStream(true).start();
+		try (BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+			while ((line = bri.readLine()) != null) {
+				Logger.log(getClass(), LogLevel.TRACE, line);
+				int schemaSep = line.indexOf(" ");
+				int keySep = line.indexOf(" ", schemaSep + 1);
+				String entry = line.substring(0, keySep);
+				String value = line.substring(keySep + 1).replaceAll("'", "");
 
-		while ((line = bri.readLine()) != null) {
-			Logger.log(getClass(), LogLevel.TRACE, line);
-			int schemaSep = line.indexOf(" ");
-			int keySep = line.indexOf(" ", schemaSep + 1);
-			String entry = line.substring(0, keySep);
-			String value = line.substring(keySep + 1).replaceAll("'", "");
+				// TODO 30.03.2015 bros Test for IP6 compatibility
+				if (value.matches("\\[.*\\]")) {
+					value = value.replaceAll("\\[|\\]| ", "");
+				}
 
-			// TODO 30.03.2015 bros Test for IP6 compatibility
-			if (value.matches("\\[.*\\]")) {
-				value = value.replaceAll("\\[|\\]| ", "");
+				Logger.log(getClass(), LogLevel.TRACE, "prop is: {}|{}", entry, value);
+				settings.setProperty(entry, value);
 			}
-
-			Logger.log(getClass(), LogLevel.TRACE, "prop is: {}|{}", entry, value);
-			settings.setProperty(entry, value);
 		}
 		try {
 			p.waitFor();
 		} catch (InterruptedException ex) {
 			Logger.log(getClass(), LogLevel.ERROR, ex.getMessage());
+			Thread.currentThread().interrupt();
 		}
 		return settings;
 	}

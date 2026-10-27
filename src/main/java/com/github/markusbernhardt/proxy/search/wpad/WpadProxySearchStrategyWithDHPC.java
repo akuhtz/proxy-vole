@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.ProxySelector;
+import java.net.URI;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Properties;
@@ -135,7 +136,7 @@ public class WpadProxySearchStrategyWithDHPC implements ProxySearchStrategy {
 
 			// Try to connect to URL
 			try {
-				URL lookupURL = new URL("http://wpad." + fqdn + "/wpad.dat");
+				URL lookupURL = URI.create("http://wpad." + fqdn + "/wpad.dat").toURL();
 				Logger.log(getClass(), LogLevel.TRACE, "Trying url: {}", lookupURL);
 
 				HttpURLConnection con = (HttpURLConnection) lookupURL.openConnection(Proxy.NO_PROXY);

@@ -8,8 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.Proxy;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -90,7 +89,6 @@ public class UrlPacScriptSource implements PacScriptSource {
 	 * @param scriptUrl
 	 * @return the content of the script file.
 	 * @throws IOException
-	 * @throws URISyntaxException
 	 ************************************************************************/
 
 	private String readPacFileContent(String scriptUrl) throws IOException {
@@ -99,7 +97,7 @@ public class UrlPacScriptSource implements PacScriptSource {
 			if (scriptUrl.indexOf(":/") == -1) {
 				file = new File(scriptUrl);
 			} else {
-				file = new File(new URL(scriptUrl).toURI());
+				file = new File(URI.create(scriptUrl));
 			}
 			
 			StringBuilder result = new StringBuilder();
@@ -111,7 +109,6 @@ public class UrlPacScriptSource implements PacScriptSource {
 			}
 			return result.toString();
 		} catch (Exception e) {
-			System.out.println(System.getProperty("user.dir"));
 			Logger.log(getClass(), LogLevel.ERROR, "File reading error.", e);
 			throw new IOException(e.getMessage());
 		}
@@ -149,10 +146,10 @@ public class UrlPacScriptSource implements PacScriptSource {
 			// Read expire date.
 			this.expireAtMillis = con.getExpiration();
 
-			BufferedReader r = getReader(con);
-			String result = readAllContent(r);
-			r.close();
-			return result;
+			try (BufferedReader r = getReader(con)) {
+				String result = readAllContent(r);
+				return result;
+			}
 		} finally {
 			setPacProxySelectorEnabled(true);
 			if (con != null) {
@@ -215,7 +212,7 @@ public class UrlPacScriptSource implements PacScriptSource {
 	 ************************************************************************/
 
 	private HttpURLConnection setupHTTPConnection(String url) throws IOException, MalformedURLException {
-		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection(Proxy.NO_PROXY);
+		HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection(Proxy.NO_PROXY);
 		con.setConnectTimeout(getTimeOut(OVERRIDE_CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT));
 		con.setReadTimeout(getTimeOut(OVERRIDE_READ_TIMEOUT, DEFAULT_READ_TIMEOUT));
 		con.setInstanceFollowRedirects(true);

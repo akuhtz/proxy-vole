@@ -30,6 +30,8 @@ public class PacProxySelector extends ProxySelector {
 
     private PacScriptParser pacScriptParser;
 
+    private volatile boolean parserInitFailed;
+
     private static volatile boolean enabled = true;
 
     /*************************************************************************
@@ -78,6 +80,8 @@ public class PacProxySelector extends ProxySelector {
             pacScriptParser = new JavaxPacScriptParser(pacSource);
         }
         catch (Exception e) {
+            pacScriptParser = null;
+            parserInitFailed = true;
             Logger.log(getClass(), LogLevel.ERROR, "PAC parser error.", e);
         }
     }
@@ -126,6 +130,10 @@ public class PacProxySelector extends ProxySelector {
     private List<Proxy> findProxy(URI uri) {
         try {
             if (pacScriptParser == null) {
+                if (parserInitFailed) {
+                    Logger.log(getClass(), LogLevel.ERROR, "PAC parser failed to initialize. Returning no proxy for: {}",
+                        uri);
+                }
                 return ProxyUtil.noProxyList();
             }
             String parseResult = pacScriptParser.evaluate(uri.toString(), uri.getHost());

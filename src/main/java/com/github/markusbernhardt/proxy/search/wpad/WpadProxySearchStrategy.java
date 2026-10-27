@@ -7,6 +7,7 @@ import java.net.NetworkInterface;
 import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.SocketException;
+import java.net.URI;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
@@ -150,7 +151,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
 
       // Try to connect to URL
       try {
-        URL lookupURL = new URL(stringBuilder.toString());
+        URL lookupURL = URI.create(stringBuilder.toString()).toURL();
         Logger.log(getClass(), LogLevel.TRACE, "Trying url: {}", lookupURL);
 
         HttpURLConnection con = (HttpURLConnection) lookupURL.openConnection(Proxy.NO_PROXY);
