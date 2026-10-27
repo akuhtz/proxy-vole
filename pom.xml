@@ -28,7 +28,7 @@
 	<slf4j.version>2.0.20</slf4j.version>
     <logback.version>1.6.6</logback.version>
     <delight-rhino-sandbox.version>0.2.5</delight-rhino-sandbox.version>
-    <rhino-engine.version>1.9.1</rhino-engine.version>
+    <rhino-engine.version>1.9.2</rhino-engine.version>
   </properties>
 
   <scm>
